@@ -38,3 +38,65 @@ Los usuarios pueden tener asignadas politicas en linea de forma individual, sin 
     - Action: lista de acciones que esta politica permite o deniega.
     - Resource: lista de recursos a los que se aplican las acciones.
     - Condition: condiciones para cuando esta politica esta en efecto (opcional).
+
+**IAM - Politica de contraseñas**
+
+- Passwords fuertes = mayor seguridad para tu cuenta.
+- En AWS, puedes configurar una politica de passwords:
+    - Establecer una longitud minima
+    - Requerir tipos de caracteres especificos:
+        - Incluyendo letras mayusculas
+        - letras minusculas
+        - numeros
+        - caracteres no alfanumericos
+    - Permitir a todos los usuarios de IAM cambiar sus propias passwords
+    - Requerir a los usuarios que cambien su password despues de un tiempo
+    - Impedir la reutilizacion de la password.
+
+**Multi Factor Authentication - MFA**
+
+- Los usuarios tienen acceso a tu cuenta y posiblemente pueden cambiar configuraciones o eliminar recursos en tu cuenta de AWS.
+- Quieres proteger tus cuentas root y los usuario de IAM.
+- MFA = password que conoces + dispositivo de seguridad que posees.
+- Principal beneficio de MFA: si una password es robada o hackeada, la cuenta no se ve comprometida.
+
+**Opciones de dispositivos MFA en AWS**
+
+![image.png](attachment:6710a39e-2814-420e-91af-12516d437c48:image.png)
+
+![image.png](attachment:3d044065-0010-4f70-9181-0ec40def8d20:image.png)
+
+Como pueden los usuarios acceder a AWS?
+
+- Para acceder a AWS, tienes tres opciones:
+    - Consolda de administracion de AWS: protegida por password + MFA.
+    - Interfaz de linea de comandos de AWS (CLI): protegida por claves de acceso.
+    - AWS Software Developer Kit (SDK) - para el codigo: protegido por claves de acceso.
+    - Las claves de acceso se generan a traves de la consola de AWS
+- Los usuarios gestionan sus propias claves de acceso.
+- Las claves de acceso son secretas, como una password no se comparten.
+- Id de la clave de acceso = nombre de usuario.
+- Clave de acceso secreta  = password.
+
+![image.png](attachment:324b40c8-11dc-48df-a0ec-20cb673d3e8c:image.png)
+
+Que es la CLI de AWS?
+
+- Una herramienta que permite interactuar con los servicios de AWS mediante comandos en tu shell de linea de comandos.
+- Acceso directo a las API publicas de los servicios de AWS.
+- Puedes desarrollar scripts para gestionar tus recursos.
+- Es de codigo abierto
+- Alternativa al uso de la consola de administracion de AWS.
+
+![image.png](attachment:6700576f-0246-4289-9411-f9d31bf488f1:image.png)
+
+Que es el SDK de AWS?
+
+- Kit de desarrollo de software de AWS (AWS SDK).
+- APIs especificas para cada lenguaje (conjunto de bibliotecas).
+- Permite acceder y administrar los servicios de AWS mediante programacion.
+- Integrado en la aplicacion.
+- Admite:
+    - SDKs (Javascript, Python, PHP, .NET, Ruby, Java, Go, Node.js, C++).
+    - SDKs para moviles (Android, iOS).
+    - SDKs para dispotivos loT (Embedded C, Arduino, …).
