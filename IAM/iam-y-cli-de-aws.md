@@ -100,3 +100,34 @@ Que es el SDK de AWS?
     - SDKs (Javascript, Python, PHP, .NET, Ruby, Java, Go, Node.js, C++).
     - SDKs para moviles (Android, iOS).
     - SDKs para dispotivos loT (Embedded C, Arduino, …).
+
+**Roles de IAM para los servicios de AWS**
+
+- Algun servicio de AWS tendra que realizar acciones en tu nombre.
+- Para ello, asignaremos permisos a los servicios de AWS con Roles IAM.
+- Roles comunes:
+    - Roles de instancia EC2
+    - Roles de la funcion Lambda
+    - Roles para CloudFormation.
+
+![image.png](attachment:61eacf28-af9a-474f-bf5b-0a88f62f6df4:image.png)
+
+**Herramientas de seguridad de IAM**
+
+- IAM Credentials Report / Informe de credenciales de IAM (a nivel de cuenta)
+    - Un informe que enumera todos los usuarios de tu cuenta y el estado de tus diversas credenciales.
+- IAM Access Advisor / Asesor de acceso de IAM (a nivel de usuario)
+    - Muestra todos los permisos de servicio concedidos a un usuario y cuando se accedio a estos por ultima vez.
+    - Puedes utilizar esta informacion para revisar tus politicas.
+
+**Directrices y buenas practicas de IAM**
+
+- No utilices la cuenta root excepto para la configuracion de la cuenta AWS
+- Un usuario fisico = Un usuario AWS
+- Asignar usuarios a grupos y asignar permisos a grupos.
+- Crear una politica de passwords fuertes.
+- Utilizar y reforzar el uso de la autenticacion multifactor (MFA)
+- Crear y utilizar Roles para dar permisos a los servicios de AWS.
+- Utilizar claves de acceso para el acceso programatico (CLI/SDK)
+- Revisar los permisos de tu cuenta con el informa de credenciales de IAM o access advisor de IAM.
+- No compartir nunca los usuarios de IAM ni las claves de acceso.
