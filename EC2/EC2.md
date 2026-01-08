@@ -81,3 +81,38 @@ Ejemplo
 | c5d.4xlarge | 16   | 32        | 1 x 400 NVMe SSD | Hasta 10 Gbps         | 4.750                        |
 | r5.16xlarge | 64   | 512       | solo EBS         | 20 Gbps               | 13.600                       |
 | m5.8xlarge  | 32   | 128       | Solo EBS         | 10 Gbps               | 6.800                        |
+
+### **Grupos de seguridad y puertos clasicos**
+- Los grupos de seguridad son la base de la seguridad en AWS.
+- Controlan como se permite el trafico dentro o fuera de nuestras instancias EC2.
+- Los grupos de seguridad solo contienen reglas de permiso.
+- Las reglas de los grupos de seguridad pueden hacer referencia por IP o por grupo de seguridad.
+
+### **Grupos de seguridad inmersion mas profunda**
+
+- Los grupos de seguridad actuan como un "firewall" en las instancias de EC2.
+- Regulan:
+  - El acceso a los puertos.
+  - Rangos de IP autorizados - IPv4 e IPv6.
+  - Control de la red de entrada (de otros a la instancia).
+  - Control de la red de salida (de la instancia hacia otra).
+
+### **Grupos de seguridad es bueno saber**
+
+- Puede adjuntarse a multiples instancias.
+- Bloqueado a una combinacion de region/VPC.
+- Vive fuera del EC2 - si el trafico esta bloqueado, la instancia EC2 no lo vera.
+- Es bueno mantener un grupo de seguridad separado para el acceso SSH.
+- Si tu aplicacion no es accesible (tiempo de espera), entonces es un problema de grupo de seguridad.
+- Si tu aplicacion de un error de "conexion rechazada", etnonces es un error de la aplicacion o no se ha lanzado.
+- Todo el trafico de entrada esta bloqueado por defecto.
+- Todo el trafico de salida esta autorizado por defecto.
+
+
+### **Puertos clasicos que hay que conocer**
+- 22= SSH (Secure Shell) - iniciar sesion en una instancia de linux.
+- 21 = FTP (File Transfer Protocol) - subir archivos a un archivo compartido.
+- 22 = SFTP (Secure File Transfer Protocol) - subir archivos usando SSH.
+- 80 = HTTP - acceso a sitios web no seguros.
+- 443 = HTTPS - acceso a sitios web seguros.
+- 3389 = RDP (Remote Desktop Protocol) - iniciar sesion en una instancia de Windows.
