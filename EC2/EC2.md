@@ -116,3 +116,80 @@ Ejemplo
 - 80 = HTTP - acceso a sitios web no seguros.
 - 443 = HTTPS - acceso a sitios web seguros.
 - 3389 = RDP (Remote Desktop Protocol) - iniciar sesion en una instancia de Windows.
+
+### **Opciones de compra de instancias EC2**
+- Instancias bajo demanda: carga de trabajo corta, precio predecible, pago por segundos.
+- Reservadas (1 y 3 years):
+  - Instancias reservadas - cargas de trabajo largas.
+  - Instancias reservadas convertibles - cargas de trabajo largas con instancias flexibles.
+- Planes de ahorro (1 y 3 years) - compromiso con una cantidad de uso, carga de trabajo larga.
+- Instancias Spot - cargas de trabajo cortas, baratas, pueden perder instancias (menos fiables).
+- Hosts dedicados: reserve un servidor fisico completo, controle la ubicacion de las instancias.
+- Instancias dedicadas - ningun otro cliente compartira tu hardware.
+- Reservas de capacidad - reserva de capacidad en una AZ especifica para cualquier duracion.
+
+	#### **EC2 bajo demanda**
+	- Paga por lo que usas:
+	  - Linux o Windos - facturacion por segundo, despues del primer minuto.
+	  - El resto de sistemas operativos se facturan por hora.
+	- Tiene el coste mas elevado, pero no hay que pagar por adelantado.
+	- Sin compromiso a largo plazo.
+	- Recomendado para cargas de trabajo ac orto plazo y sin interrupciones, cuando no se puede predecir el comportamiento de la app.
+
+	#### **Instancias reservadas de EC2**
+	- Tienen un % de descuento en comparacion con el servicio bajo demanda.
+	- Reserva de atributos de instancia especificos (tipos de instancia, region, ocupacion, sistema, operativo).
+	- Periodo de reserva - 1 year (+descuento) o 3 years (+++descuento).
+	- Opciones de pago - sin pago inicial(+), pago parcial(++), pago total(+++).
+	- Alcance de la isntancia reservada - Por region o por zona (capacidad de reserva en una AZ).
+	- Recomendado para aplicaciones de uso constante (piensa en una base de datos).
+	- Puedes comprar y vender en el Marketplace de instancias reservadas
+	
+	#### **Instancias reservadas convertibles de EC2**
+	- Puedes cambiar el tipo de la instancia EC2, la familia de instancias, el SO, etc.
+	- Tienen un % de descuento.
+
+	#### **Planes de ahorro EC2**
+	- Obten un descuento basado en el uso a largo plazo.
+	- Comprometete a un determinado tipo de uso.
+	- El uso mas alla de los planes de ahorro de EC2 se factura al precio bajo demanda.
+	- Bloqueado a una familia de instancias especificas y a una region de AWS.
+	- Flexible a traves de:
+	  - Size de la instancia.
+	  - OS.
+	  - Tenencia.
+
+	#### **Instancias EC2 Hot Spot**
+	- Puedes obtener un descuento de hasta el 90% en comparacion con la demanda.
+	- Instancias que puedes "perder" en cualquier momento si su precio maximo es inferior al precio spot actual.
+	- Las instancias Mas rentables de AWS.
+	- Util para las carga de trabajo que son resistentes a fallos:
+	  - Trabajos por lotes.
+	  - Analisis de datos.
+	  - Procesamiento de imagenes.
+	  - Cualquier carga de trabajo distribuida.
+	  - Cargas de trabajo con una hora de inicio y finalizacion flexible.
+	- No es adecuado para tabajos criticos o bases de datos.
+
+	#### **Hosts dedicados EC2**
+	- Un servidor fisico con capacidad de instancia EC2 totalmente dedicado a su uso.
+	- Permite abordar los requisitos de normativas y utilizar licencias de software vinculadas al servidor existentes (licencias de software por socket, por nucleo, por VM).
+	- Opciones de compra:
+	  - Bajo demanda - pago por segundo para el host dedicado activo.
+	  - Reservado - 1 a 3 years.
+	- La opcion mas cara.
+	- Util para el software que tiene un modelo de licencia complicado (BYOL - Bring Your Own License).
+	- O para empresas que tienen fuertes necesidades de regulacion o cumplimiento.
+
+	#### **Instancias dedicadas de EC2**
+	- Las instancias se ejecutan en un hardware dedicado para ti.
+	- Puedes compartir el hardware con otras instancias de la misma cuenta.
+	- No hay control sobre la ubicacion de las instancias (se puede mover a hardware despues de la parada/arranque).
+
+	#### **Reservas de capacidad de EC2**
+	- Reserva la capacidad de las instancias bajo demanada en una AZ especifica para cualquier duracion.
+	- Siempre tendras acceso a la capacidad de EC2 cuando la necesites.
+	- Sin compromiso de tiempo, sin descuentos de facturacion.
+	- Combina con las instancias regionales reservadas y los planes de ahorro para beneficiarte de descuentos en la facturacion.
+	- Se te cobra la tarifa bajo demanda tanto si se ejecuta instancias como si no.
+	- Adecuado para cargas de trabajo ininterrumpidas a corto palzo que necesitan estar en una AZ especifica.
