@@ -79,3 +79,29 @@
   - Una direccion MAC.
 - Puedes crear ENI independientes y adjuntarlas sobre la marcha (moverlas) en instancias EC2 para la conmutacion por error.
 - Vinculadas a una zona de disponibilidad (AZ) especifica.
+
+### Hibernacion de EC2
+- Sabemos que podemos parar y terminar las instancias:
+  - Parar - los datos del disco (EBS) se mnatienen intactos en el siguiente arranque.
+  - Terminar - se pierden los volumenes EBS (root) que tambien estan preparados para ser destruidos.
+- En el arranque ocurre lo siguiente:
+  - primer arranque - el SO arranca y se ejecuta el script EC2 User Data
+  - Siguientes arranques - arranca el SO
+  - Despues se inicia tu aplicacion, se calientan las caches
+
+**Hibernacion:
+- Se conserva el estado de la RAM
+- El arranque de la isntancia es mucho mas rapido
+- Bajo el capo: el estado de la RAM se escribe en un archivo en el volumen EBS raiz encriptado.
+- Casos de uso:
+  - Procesamiento de larga duracion.
+  - Guardar estado de la RAM.
+  - Servicios que tardan en inicializarse.
+
+- Familias de instancias soportadas - C3, C4, C5, I3, M3, M4, R3, R4, T2, T3...
+- Size de la Ram de la instancia debe ser menor a 150GB
+- Size de la instancia - no se soporta bare metal.
+- AMI - Amazon Linux 2, Linux AMI, Ubuntu, RHEL, CentOS y Windows...
+- Volumen root - debe ser EBS, encriptado.
+- Disponible para instancias bajo demanda, reservadas y Spot.
+- Una instancia NO puede estar hibernada mas de 60 dias.
