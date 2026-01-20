@@ -103,3 +103,52 @@
 	- Para datos a los que se accede con poca frecuencia.
 	- Escenarios en los que el menor coste es importante.
 	- Rendimiento maximo de 250 MiB/s - IOPS maximas de 250.
+
+### Multi-Attach EBS - familia io1/io2
+- Adjunta el mismo volumen EBS a varias instancias EC2 en la misma AZ.
+- Cada instancia tiene permisos completos de lectura y escritura en el volumen de alto rendimiento.
+- Caso de uso:
+	- Conseguir una mayor disponibilidad de las aplicaciones en clusters de Linux (por ejemplo, Teradata).
+	- Las aplicaciones deben gestionar operaciones de escritura concurrentes.
+- Hasta 16 instancias EC2 a la vez.
+- Debe utilizar un sistema de archivos que sea compatible con el cluster (no XFS, EX4, etc..)
+
+### Cifrado de EBS
+- Cuando creas un volumen EBS encriptado, obtienes lo siguiente:
+	- Los datos en reposo estan encriptados dentro del volumen.
+	- Todos los datos en movimiento entre la instancia y el volumen estan encriptados.
+	- Todas las instantaneas estan encriptadas.
+	- Todos los volumenes creados a partir de la instantanea.
+- El cifrado y el decifrado se gestionan de manera transparente.
+- El cifrado EBS aprovecha las claves de KMS (AES-256).
+- La copia de un snapshot no cifrado permite el cifrado.
+- Los snapshots de los volumenes encriptados estan tambien encriptados.
+
+### Amazon EFS - Elastic File System
+- NFS gestionado (sistema de archivos de red) que puede montarse en muchas EC2
+- EFS funciona con instancias EC2 en multi-AZ.
+- Alta disponibilidad, escalable, caro (3x gp2), pago por uso.
+- Caso de uso: gestion de contenidos, servicio web, intercambio de datos, wordpress.
+- Utiliza el protocolo NFSv4.1
+- Utiliza el grupo de seguridad para controlar el acceso a EFS.
+- Compatible con AMI basadas en Linux (no en windows).
+- Cifrado en resposo mediante KMS.
+- Sistema de archivos POSIX (Linux) que tiene una API de archivos estandar.
+- El sistema de archivos se escala automaticamente, paga por uso y no hay que planificar la capacidad.
+
+**EFS - Clases de rendimiento y almacenamiento**
+- Escala EFS
+	- 1000s de clientes NFS concurrentes, 10 GB + /s de rendimiento.
+	- Crece hasta convertirse en un sistema de archivos en red a escala de petabytes, de forma automatica.
+- Modo de rendimiento (establecido en el momento de creacion del EFS)
+	- Proposito general (por defecto): casos de uso sensibles a la latencia (servidor web, CMS, etc).
+	- E/S maxima: mayor latencia, rendimiento, altamente paralelo (big data, procesamiento de medios).
+- Modo de rendimiento (Throughput)
+	- Rafaga ( 1TB = 50 MiB/s + rafaga de hasta 100MiB/s).
+	- Aprovisionado: fija tu rendimiento independientemente del size del almacenamiento, pro ejemplo: 1 GiB/s para un almacenamiento de 1 TB.
+- Modo de almacenamiento (funcion de gestion del ciclo de vida: mover el archivo despues de N dias):
+	- Estandar: para archivos de acceso frecuente.
+	- Acceso infrecuente (EFS-IA): Coste de recuperacion de los archivos, menor precio de almacenamiento.
+ - Disponibilidad y durabilidad:
+	- Estandar: Multi-AZ, ideal para prod.
+	- Una zona: Una AZ, ideal para dev, copia de seguridad activada por defecto y compatible con EFA-IA.
