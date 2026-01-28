@@ -77,3 +77,33 @@ Los load balancers son servidores que reenvian el trafico a otros servidores en 
 - Direcciones IP - privadas
 - Application Load Balancer
   Los controles de salud soportan protocolos HTTP, TCP y HTTPS
+
+  ### Gateway Load Balancer (GLB)
+- Implementa, escala y administra una flota de dispositivos virtuales de red de terceros en AWS.
+- Ejemplo: Firewalls, Sistemas de deteccion y prevencion de intrusiones, sistemas de inspeccion profunda de paquetes, manipulacion de cargas.
+- Opera en la capa 3 (capa de red) - paquetes IP
+- Combina las siguientes funciones:
+	- Gateway transparente - entrada/salida unica para todo el trafico.
+	- Load Balancer - distribuye el trafico a tus dispositivos virtuales.
+- Utiliza el protocolo GENEVE en el puerto 6081
+
+**Que es GENEVE?**
+Geneve es un protocolo que encapsula trafico de red cuando lo envia a dispositivos virtuales (firewalls, IDS/IPS, Appliances de seguridad, etc).
+
+GENEVE = Generic Network Virtualization Encapsulation.
+
+**Target Groups**
+- Instancias EC2.
+- Direcciones IP privadas.
+
+### Elastic Load Balancer - Sesiones Persistentes (Sticky sessions)
+- Es posible implementar stickness para que le mismo cliente sea redirigido a la misma isntancia detras del balanceador de carga.
+- Esto funciona para los classic load balancer y los application load balancer.
+- La cookie utilizada para la adherencia tiene una dueDate que es calculable.
+- Caso de uso: asegurarse de que el usuario no pierda sus datos de session.
+
+### Elastic Load Balancer - Balanceo de carga entre zonas
+- Con load balancer de zona cruzada:
+  Cada instancia del load balancer distribuye uniformemente entre todas las instancias registradas en todas las AZ de una misma region.
+- Sin load balancer de zona cruzada:
+  Las solicitudes se distribuyen en las instancias del nodo del elastic load balancer.
