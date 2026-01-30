@@ -107,3 +107,49 @@ GENEVE = Generic Network Virtualization Encapsulation.
   Cada instancia del load balancer distribuye uniformemente entre todas las instancias registradas en todas las AZ de una misma region.
 - Sin load balancer de zona cruzada:
   Las solicitudes se distribuyen en las instancias del nodo del elastic load balancer.
+
+  ### Elastic Load Balancer (ELB) - Certificados SSL/TLS
+- Un certificado SSL permite que el trafico entre tus clientes y tu load balancer este cifrado en transito (cifrado en vuelo).
+- SSL - Secure Socket Layer
+- TLS - Transport Layer Security, es una version mas reciente.
+- Los certificados SSL publicos son emitidos por autoridades de certificacion (CA).
+- Los certificados SSL tienen fecha de caducidad y deben ser renovados.
+- El load balancer utiliza un certificado X.509 (certificado de servidor SSL/TLS)
+- Puedes gestionar los certificados mediante ACM (AWS Certificate Manager).
+- Tambien se pueden crear y subir certificados propios.
+
+**Server Name Indication (SNI)**
+- SNI resuelve el problema de cargar varios certificados SSL en un servidor web.
+- Es un protocolo y requiere que el cliente indique el nombre del servidor de destino en el handshake del SSL inicial.
+- El servidor encontrara entonces el certificado correcto o devolvera el predeterminado.
+
+### Elastic Load Balancer - Drenaje de la conexion
+- Nombre de la caracteristica:
+	- Drenaje de la conexion - CLB
+	- Retraso en el desregistro - ALB y NLB
+- Tiempo para completar las "peticiones en vuelo" mientras la instanciase esta desregistrando o no esta sana.
+-  Deja de enviar nuevas peticiones a la instancia EC2 que se esta desregistrando.
+- Entre 1 y 3600 segundos (por defecto: 300 segundos).
+- Se puede desactivar (fijar el valor en 0).
+- Establece un valor bajo si tus peticiones son cortas.
+
+### Vision general de los Auto Scaling Groups (ASG)
+El objetivo de un ASG es el siguiente:
+- Reducir (agregar instancias EC2) para adaptarse a un aumento de carga. 
+- Aumentar (Eliminar instancias EC2) para que coincida con una disminucion de la carga.
+- Asegurar que tenemos un numero minimo y maximo de instancias EC2 en funcionamiento.
+- Registrar automaticamente nuevas instancias en un Load Balancer.
+- Volver a crear una instancia EC2 en caso de que se elimine una anterior
+
+**Atributos**
+- Una plantilla de lanzamiento:
+	- AMI + Tipo de instancia
+	- Datos de usuario EC2
+	- Volumenes EBS
+	- Grupos de seguridad
+	- Par de claves SSH
+	- Roles IAM para instancias EC2
+	- Informacion sobre la red y subred
+	- Informacion del Load Balancer
+- Size minimo / maximo / capacidad inicial.
+- Politicas de escalado.
