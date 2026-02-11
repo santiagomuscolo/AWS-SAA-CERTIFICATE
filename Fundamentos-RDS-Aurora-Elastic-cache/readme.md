@@ -46,3 +46,33 @@ RDS es un servicio gestionado que provee lo siguiente:
 - No se utiliza para escalar
 - La replicacion Multi-AZ es gratis
 - Las replicas de lectura deben configurarse como multi AZ para la recuperacion de desastres.
+
+### RDS personalizado para Oracle y Microsoft SQL
+- Base de datos gestionada de Oracle y Microsoft SQL server con personalizacion del sistema operativo y de la base de datos.
+- RDS: automatiza la configuracion, el funcionamiento y el escalado de la base de datos de AWS
+- Personalizada: acceso a la base de datos subyacente y al SO para que puedas:
+	- Configurar los ajustes
+	- Instalar parches
+	- Habilitar las funciones nativas
+	- Acceder a la instancia EC2 subyacente mediante SSH o SSM Session Manager
+- Desactivar el modo automatizacion permite realizar la personalizacion.
+- RDS vd RDS Personalizada:
+	- RDS: Toda la base de datos y el SO son gestionados por AWS
+	- RDS pers.: Acceso administrativo completo al SO subyacente y a la base de datos.
+
+### Amazon Aurora
+ Aurora es una tecnologica propietaria de AWS que soporta MySQL y Postgres como bases de datos, la misma esta optimizada para el cloud de AWS y su rendimiento es 5 veces superor al de MySQL en RDS y mas de 3 veces superior al rendimiento de Postgres en RDS.
+ El escalado del almacenamiento es automatico y el mismo va de 10 en 10 gb hasta los 128TB.
+ - Puede tener hasta 15 replicas.
+ - La conmutacion por error es instantanea, nativa de la Alta Disponibilidad.
+
+**Alta disponibilidad y escalado de lectura de Aurora**
+- 6 copias de tus datos en 3 AZ:
+	- 4 copias de las 6 necesarias para las escrituras
+	- 3 copias de las 6 necesarias para las lecturas
+	- Autoreparacion con replicacion entre pares
+	- El almacenamiento esta dividido en 100 volumenes
+- Una instancia de Aurora se encarga de las escrituras (maestra)
+- Recuperacion automatica del maestro en menos de 30 segundos
+- El maestro + hasta 15 replicas de lectura de Aurora realizan lecturas.
+- Soporta para la replicacion entre regiones
