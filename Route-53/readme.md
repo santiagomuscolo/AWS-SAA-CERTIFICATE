@@ -46,3 +46,45 @@ navegador web -> servidor DNS local -> servidor DNS raiz -> servidor DNS TLD -> 
 - Un contenedor para los registros que definen como dirigir el trafico a un dominio y sus subdominios.
 - Zonas de alojamiento publico: Contiene registros que especifican como enrutar el trafico en internet
 - Zonas de alojamiento privadas: Contienen registros que especificar como enrutar el trafico dentro de una o mas VPC
+
+### TTL
+El Time to live es el tiempo especifico que vivira en cache un registro, en este caso de route 53 por ejemplo una IP de un dominio, hay 2 estrategias para esto:
+- TTL alto - por ejemplo 24 horas:
+  - Menos trafico en route 53
+  - Registros posiblemente obsoletos.
+- TTL bajo - por ejemplo, 60 segundos.
+	- Mas trafico en route 53 por ende mas costoso
+	- los registros estan desfasados por menos tiempo
+	- Facilidad para cambiar los registros
+- Excepto los registros de alias, el TTL es obligatorio para cada registro DNS
+
+### CNAME vs ALIAS
+- Los recursos de AWS (Load balancer, cloudfront) exponen un nombre de host de AWS:
+  - ibl-1234.us-east-2.elb.amazonaws.com y quieres myapp.midominio.com
+- CNAME: 
+	- Apunta un nombre de host a cualquier otro nombre de host (app.midominio.com => blablabla.algo.com)
+	- SOLO PARA DOMINIOS NO ROOT
+- Alias:
+	- Apunta un nombre de host a un recurso de AWS (app.midomain.com => blabla.amazonaws.com)
+	- Funciona para dominio raiz y dominio no raiz
+	- Gratis
+	- Comprobacion de salud nativa
+
+**Registros con alias**
+- Asigna un nombre de host a un recurso de AWS
+- Una extension de la funcionalidad del DNS
+- Reconoce automaticamente los cambios en las direcciones IP del recurso
+- A diferencia de CNAME, puede utilizarse para el nodo superior de un espacio de nombres DNS (Zona Apex), por ejemplo: example.com
+- El registro Alias es siempre del tipo A/AAAA para los recursos AWS (IPv4 y 6)
+- No puedes establecer el TTL
+
+**Objetivos Registros con Alias**
+- Elastic load balancers
+- distribuciones cloudfront
+- api gateway
+- entornos elastic beanstalk
+- sitios web s3
+- endpoints de interfaz vpc
+- acelerador global
+- registro route 53 en la misma zona alojada
+- NO PUEDES ESTABLECER UN REGISTRO ALIAS PARA UN NOMBRE DNS DE EC2
