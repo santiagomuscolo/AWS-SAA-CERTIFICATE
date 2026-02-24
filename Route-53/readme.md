@@ -88,3 +88,49 @@ El Time to live es el tiempo especifico que vivira en cache un registro, en este
 - acelerador global
 - registro route 53 en la misma zona alojada
 - NO PUEDES ESTABLECER UN REGISTRO ALIAS PARA UN NOMBRE DNS DE EC2
+
+### Politica de enrutamiento
+No se debe confundir "enrutamiento" con el de por ejemplo: un load balancer que redirige trafico...
+El enrutamiento en el DNS no enruta trafico, solo responde a consultas DNS.
+
+#### Simple
+- Normalmente dirige el trafico a un solo recurso aunque pueden especificarse varios valores en un mismo registro, de ser asi el cliente elige uno al azar.
+- Cuando se habilita el Alias, solos epuede especificar un recurso de AWS
+- No se puede asociar a los controles de salud
+
+#### Ponderadas
+Politica de enrutamiento basado en el peso de las instancias:
+- Controla el % de las solicitudes que van a cada recurso especifico.
+- Asigna a cada registro un peso relativo:
+  traffic(%) = Weight ofr a specific record / Sum of all the weights for all records
+- Los registros DNS deben tener el mismo nombre y tipo.
+- Pueden asociarse a las comprobaciones de salud.
+- Casos de uso: equilibrar la carga entre regiones, probar nuevas versiones de aplicaciones.
+- Asigna un peso de 0 a un registro para dejar de enviar trafico a un recurso.
+- Si todos los registros tienen un peso de 0 se devolveran todos los registros por igual
+
+#### Basadas en latencia
+- Redigir al recurso que tenga la menor latencia cerca de nosotros.
+- Muy util cuando la latencia para los usuarios es una prioridad.
+- La latencia se basa en el traifoc entre los usuarios y las regiones de AWS
+- Los usuarios de Alemania pueden ser dirigidos a EEUU (si esa es la latencia mas baja)
+- Se puede asociar a los controles de salud (tiene capacidad de conmutacion por error)
+
+### Controles de salud
+- Las comprobaciones de salud HTTP son solo para recursos publicos.
+- Comprobacion de salud => conmutacion por error de DNS automatizada:
+  - Comprobaciones de salud que supervisan un endpoint
+  - Controles de salud que controlas otros controles de salud
+  - Controels de salud que supervisan alarmas de cloudwatch
+- Los controles de salud se integran con las metricas de cloudwatch
+
+**Monitorizar un endpoint**
+- Unos 15 verificadores de salud globales comprobaran la salud del endpoint
+	- Umbral de salud/no salud - 3 por defecto
+	- Intervalo - 30 segundos (customizable)
+	- Protocolo soportado - TCP, HTTP y HTTPS
+	- Si > 18% de los comprobadores de salud ifnorman que el endpoint esta sano Route 53 lo declara sano.
+	- Es posible elegir las ubicaciones que quieres que utilice Route 53.
+- Las comprobaciones de salud solo pasan si el endpoint responde 2xx y 3xx
+- Se pueden configurar las comprobaciones para que pasen o no en funcion del texto de los primeros 5120 bytes de la respuesta.
+- Se puede configurar el Firewall para dejar pasar los checks de Route 53.
