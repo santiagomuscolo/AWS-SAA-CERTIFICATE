@@ -109,6 +109,9 @@ Politica de enrutamiento basado en el peso de las instancias:
 - Asigna un peso de 0 a un registro para dejar de enviar trafico a un recurso.
 - Si todos los registros tienen un peso de 0 se devolveran todos los registros por igual
 
+#### Conmutacion por error (activo-pasivo)
+Mediante esta politica tenemos el linkeo a nuestra instancia (primaria) corroborado por un health-check, si este falla tendremos un path "Failover" para redirigir (DNS) a una instancia secundaria - recuperacion de desastres
+
 #### Basadas en latencia
 - Redigir al recurso que tenga la menor latencia cerca de nosotros.
 - Muy util cuando la latencia para los usuarios es una prioridad.
@@ -134,3 +137,15 @@ Politica de enrutamiento basado en el peso de las instancias:
 - Las comprobaciones de salud solo pasan si el endpoint responde 2xx y 3xx
 - Se pueden configurar las comprobaciones para que pasen o no en funcion del texto de los primeros 5120 bytes de la respuesta.
 - Se puede configurar el Firewall para dejar pasar los checks de Route 53.
+
+**Controles de salud calculados**
+- Se puede combinar los resultados de varios chequeos de salud en un solo chequeo de salud.
+- Puedes utilizar OR, AND o NOT
+- Puedes controlar hasta 256 chequeos medicos de los "hijos"
+- Especifica cuanta de las comprobaciones de salud deben pasar para que el padre pase.
+- Uso: realiza el mantenimiento de tu sitio web sin que fallen todas las comprobaciones de salud.
+
+**Zonas de alojamiento privadas**
+- Los comprobadores de salud de Route 53 estan por fuera de la VPC
+- No pueden acceder a endpoints privados (VPC privada o recurso local)
+- Puedes crear una metrica de CloudWatch y asociar una alarma de CloudWatch, y luego crear un chequeo de salud que compruebe la propia alarma.
