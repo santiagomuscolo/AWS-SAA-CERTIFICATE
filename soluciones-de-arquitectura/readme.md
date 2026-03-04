@@ -36,3 +36,26 @@ Lo que nos tenemos que llevar de esta arqutectura stateless es lo siguiente:
 3- Registro alias, hacemos uso de una IP publica para que luego usemos la red privada.
 4- La escalabilidad, esto nos permite escalar horizontal y verticalmente.
 5- El disaster recovery, al ser multi AZ nos aseguramos la actividad frente a la baja de una instancia.
+
+### MyClothes.com
+se presenta el siguiente problema de arquitectura
+![[Pasted image 20260303205052.png]]
+
+Mi solucion sin mirar la real fue la siguiente:
+![[Pasted image 20260303210619.png]]
+Con esta arquitectura indico lo siguiente: 
+- DNS resolver para comunicarse con el ALB via Alias
+- WAF intermedio para prevenir ataques informaticos
+- Comunicacion via red interna con las instancias multi AZ
+- Replicacion multi AZ para disaster recovery
+- Elasticache (REDIS) para alojar el estado del carrito y evitar requests queries a la base.
+- Replica de REDIS y RDS en la AZ 2 para disaster recovery
+
+La solucion brindada por el curso es la siguiente:
+![[Pasted image 20260303211207.png]]
+- Hacer uso de route 53 para DNS resolver
+- Hacer uso de un ALB con persistent session y restriccion de trafico via grupos de seguridad
+- Instancias con auto-escalado multi AZ para disaster recovery
+- Base de elastic-cache para los datos del carrito
+- Base RDS para guardar los datos del usuario y sus acciones
+- Se utilizan cookies con session_id para identificar en elastic-cache la data especifica del usuario si este entra en otra instancia
