@@ -59,3 +59,26 @@ La solucion brindada por el curso es la siguiente:
 - Base de elastic-cache para los datos del carrito
 - Base RDS para guardar los datos del usuario y sus acciones
 - Se utilizan cookies con session_id para identificar en elastic-cache la data especifica del usuario si este entra en otra instancia
+
+### Vision general de BeanStalk
+- Elastic Beanstalk es una vision centrada en el desarrollador de la implementacion de una aplicacion en AWS
+- Utiliza todos los componentes que antes fueron vistos: EC2, ELB, RDS, ASG
+- Es un servicio gestionado
+	- Gestiona automaticamente el aprovisionamiento de capacidad, el equilibrio de carga, el escalado, la supervision del estado de la aplicacion, la configuracion de las instancias.
+	- Solo el codigo de la aplicacion es responsabilidad del desarrollador.
+- Seguimos teniendo un control total sobre la configuracion.
+- Es gratis, se paga por instancias subyacentes
+
+**Componentes**
+- Aplicacion: coleccion de componentes de Elastic Beanstalk (entornos, versiones, configuraciones).
+- Version de la aplicacion: una iteracion del codigo de tu aplicacion.
+- Entorno
+	- Coleccion de recursos de AWS que ejecutan una version de la aplicacion (solo una a la vez)
+	- Niveles: nivel de entorno del servidor web y nivel de entorno del trabajador.
+	- Puedes crear varios entornos (dev, test, prod)
+
+**Entorno web vs entorno de trabajo**
+- Entorno web: entorno tipico para aplicaciones web que responden peticiones HTTP de usuarios.
+	- Como funciona: El usuario hace una request HTTP/HTTPS, esta llega a un load balancer, el load balancer distribuye el trafico entre las instancias EC2, y por ultimo la app le responde al usuario.
+- Entorno de trabajo: entorno destinado al procesamiento en segundo plano (los background jobs).
+	- Como funciona: Un sistema envia tareas a una cola SQS y las instancias EC2 leen las tareas de la cola para luego procesar el trabajo en segundo plano
