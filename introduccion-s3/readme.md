@@ -75,3 +75,26 @@ Estas politicas son utilizadas para:
 	- http://bucket-name.s3-website-aws-region.amazonaws.com
 	- http://bucket-name.s3-website.aws-region.amazonaws.com
 - Si recibes un error 403 forbidden deberas chequear las politicas del bucket que habilitan lecturas publicas.
+
+### Versionado S3
+- Puedes versionar tus archivos en Amazon S3
+- Se activa a nivel de bucket
+- La misma clave de sobrescritura cambiara la "version"
+- Es una buena practica versionar tus buckets
+	- Protege contra borrados involuntarios
+	- Rollin facil a la version anterior
+- Nota:
+	- Cualquier archivo no versionado antes de activar versionado tendra version nula
+	- Suspender el versionado no elimina las versiones anteriores
+
+### Replicacion S3
+- Debes activar el versionado en los buckets de origen y destino
+- Replicacion entre regiones (CRR) 
+- Replicacion en la misma region (SSR)
+- Los buckets pueden estar en diferentes cuentas de AWS
+- La copia es asincrona
+- Debes dar los permisos de IAM adecuados a S3
+
+**Casos de uso**
+- CRR - normativa, acceso de menor latencia, replicacion entre cuentas.
+- SSR - agregacion de logs, replicacion en vivo entre cuentas de produccion y de test
