@@ -98,3 +98,39 @@ Estas politicas son utilizadas para:
 **Casos de uso**
 - CRR - normativa, acceso de menor latencia, replicacion entre cuentas.
 - SSR - agregacion de logs, replicacion en vivo entre cuentas de produccion y de test
+
+### Notas de replicacion S3
+- Despues de activar la replicacion, solo se replican los objetos nuevos.
+- Opcionalmente, puedes replicar los objetos existentes utilizando la replicacion por lotes de S3
+	- Replica los objetos existentes y los objetos que fallaron en la replicacion
+- Para las operaciones de borrado
+	- Puede replicar los marcadores de borrado del origen al destino
+	- Los borrados con un ID de version no se replican (para evitar borrados maliciosos)
+- No hay "encadenamiento" de la replicacion
+
+### Vision general de clases de almacenamiento S3
+
+**Familia S3 standard**
+- Amazon S3 standard - Proposito general
+- Amazon S3 standard-infrequent-access (IA)
+- Amazon S3 One Zone-infrequent-access
+
+**Familia S3 glacier**
+- Amazon S3 Glacier Instant retrieval
+- Amazon S3 Glacier Flexible Retrieval
+- Amazon S3 Glacier Deep Archivo
+
+**OTROS**
+- Amazon S3 intelligent Tiering
+
+#### S3 durabilidad y disponibilidad
+
+**Durabilidad**
+- Alta durabilidad (99,99999999999%) de los objetos a traves de multiples AZ
+- Si almacenas 10.000.000 de objetos con S3, puedes esperar una media de perdida de un solo objeto una vez cada 10.000 anos.
+- Lo mismo para todas las clases de almacenamiento.
+
+**Disponibilidad**
+- Mide la disponibilidad de un servicio.
+- Varia en funcion de la clase de almacenamiento.
+- Ejemplo: El estandar S3 tiene una disponibilidad del 99,99% = no esta disponible 53 minutos al ano.
