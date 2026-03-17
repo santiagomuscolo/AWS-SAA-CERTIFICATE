@@ -134,3 +134,79 @@ Estas politicas son utilizadas para:
 - Mide la disponibilidad de un servicio.
 - Varia en funcion de la clase de almacenamiento.
 - Ejemplo: El estandar S3 tiene una disponibilidad del 99,99% = no esta disponible 53 minutos al ano.
+
+**Standard S3 - Uso general**
+- Disponibilidad del 99,99%
+- Se utiliza para datos de acceso frecuente
+- Baja latencia y alto rendimiento
+- Soporta 2 fallos concurrentes de la instalacion
+- Casos de uso: Analisis de big data, aplicaciones moviles y de juegos, distribucion de contenidos...
+
+**Clases de almacenamiento S3 - Infrequent Access**
+- Clase de almacenamiento en S3
+- Coste inferior al de S3 estandar
+- Amazon S3 Standard-Infrequent Access (S3 standard-IA)
+	- Disponibilidad del 99,9%
+	- Casos de uso: Recuperacion de desastres, copias de seguridad.
+- Amazon S3 One Zone-Infrequent Access (S3 One Zone IA)
+	- Alta durabilidad en una sola AZ; los datos se pierden cuando se destruye la AZ
+	- Disponibilidad del 99,5%
+	- Casos de uso: Almacenamiento de copias de seguridad secundarias de datos locales o de datos que puedes recrear.
+
+
+**Clases de almacenamiento S3 - Amazon S3 Glacier**
+- Almacenamiento de objetos de bajo coste pensado para archivar / hacer copias de seguridad.
+- Precio: precio de almacenamiento + coste de recuperacion del objeto.
+- Amazon S3 Glacier Instant Retrieval
+	- Recuperacion en milisegundos, ideal para los datos a los que se accede una vez al trimestre
+	- Duracion minima de almacenamiento de 90 dias
+- Amazon S3 Glacier Flexible Retrieval
+	- Acelerada (1 a 5 minutos), Estandar (de 3 a 5 horas), Masiva (de 5 a 12 horas) - gratis
+	- Duracion minima de almacenamiento de 90 dias.
+- Amazon S3 Glacier Deep Archive - para almacenamiento a largo plazo:
+	- Estandar (12 horas), Masiva (48 horas)
+	- Duracion minima de almacenamiento de 180 dias
+
+**S3 Intelligent-tiering**
+- Pequena cuota mensual de monitorizacion y jerarquizacion automatica.
+- Mueve los objetos automaticamente entre los niveles de acceso en funcion del uso.
+- No hay cargos por recuperacion en S3 intelligent-tiering.
+- Frequent access tier: nivel por defecto
+- infrequent access tier: objetos no accedidos durante 30 dias
+- archive instant accesss: objetos no accedidos de 90 a mas de 700 dias
+- archive access tier: configurable de 90 a mas de 700 dias
+- deep archive access tier: configurable objetos no accedidos de 180 a mas de 700 dias
+
+### Quiz
+
+Question 1:
+Tienes un archivo de 25 GB que estás intentando subir a S3 pero te da errores. ¿Cuál es una posible solución para esto?
+- Utiliza la subida de varias partes cuando subas archivos mas grandes que 5GB, se sugiere a partir de los 100 MB.
+
+Question 2:
+Obtienes errores al intentar crear un nuevo bucket de S3 llamado "**dev**". Estás utilizando una nueva cuenta de AWS sin haber creado antes ningún bucket de S3. ¿Cuál es la posible causa de esto?
+- Los nombres de los buckets se definen globalmente por lo que puede ya estar ocupado.
+
+Question 3:
+Has activado el control de versiones en tu bucket de S3 que ya contiene muchos archivos. ¿Qué versión tendrán los archivos existentes?
+- Null, solo los nuevos archivos tomaran el versionado.
+
+Question 4:
+Has actualizado una política de bucket S3 para permitir a los usuarios de IAM leer/escribir archivos en el bucket S3, pero uno de los usuarios se queja de que no puede realizar una llamada a la API `PutObject`. ¿Cuál es la posible causa de esto?
+- El usuario IAM debe tener un DENY explicito en la politica de IAM adjunta.
+
+Question 5:
+Quieres que el contenido de un bucket de S3 esté totalmente disponible en diferentes regiones de AWS. Eso ayudará a tu equipo a realizar análisis de datos con la menor latencia y coste posibles. ¿Qué función de S3 debes utilizar?
+- Replicacion en S3, esto permite replicar en otra/misma region de AWS.
+
+Question 6:
+Tienes 3 buckets de S3. Un bucket de origen A, y dos buckets de destino B y C en diferentes regiones de AWS. Quieres replicar objetos del bucket A a los dos buckets B y C. ¿Cómo lo conseguirías?
+- Configuraria una replicacion del bucket a al b y otra del bucket a al c
+
+Question 7:
+¿Cuál de los siguientes **NO** es un modo de recuperación de Glacier Deep Archive?
+- La opcion puede ser estandar o masiva/a granel ya que acelerado no existe en este tipo de storage.
+
+Question 8:
+¿Cuál de los siguientes **NO** es un modo de recuperación flexible de Glacier?
+- Instantanea no existe, solamente se nos ofrece acelerada, estandar y a granel.
