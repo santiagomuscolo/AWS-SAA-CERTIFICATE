@@ -63,3 +63,35 @@ El Cross Origin Resources Sharin (CORS) hace refetencia a "compartir recursos en
 **S3 CORS
 - Si un cliente hace una peticion de origen cruzado en nuestro bucket de S3, tenemos que habilitar las cabeceras CORS correctas.
 - Pueder permitir un origen especifico o * (todos los origenes)
+
+### S3 MFA Delete
+- MFA (Autenticacion de factores multiples): obliga a los usuarios a generar un codigo en un dispositivo (normalmente un telefono movil o un hardware) antes de realizar operaciones importantes en el S3
+- MFA sera necesario para:
+	- Eliminar permanentemente una version de un objeto
+	- Suspender el control de versiones en el bucket
+- MFA no sera necesario para:
+	- Habilitar el control de versiones
+	- Listar las versiones eliminadas
+- Para utilizar MFA Delete, el control de versiones debe estar activado en el bucket
+- Solo el propietario del bucket (cuenta root) puede activar/desactivar MFA Delete
+
+### Logs de acceso al S3
+- Para fines de auditoria, es posible que quieras registrar todos los accesos a los buckets de S3
+- Cualquier peticion realizada a S3, desde cualquier cuenta, autorizada o denegada, se registrara dentro de otro bucket S3
+- Esos datos pueden ser analizados con herramientas de analisis de datos...
+- El bucket de logs de destino debe estar en la misma region de AWS
+
+**Warning**
+- No configures tu bucket de logs para que sea un bucket monitorizado
+- Se creara un bucle de logs, y tu bucket crecera exponencialmente.
+
+### S3 - URLs pre-firmadas
+- Generar URLs pre-firmadas usando la consola de S3, la CLI de AWS o el SDK
+- Expiracion de la URL
+	- Consola S3 - de 1 minuto a 720 minutos (12 horas)
+	- CLI de AWS - configurar la caducidad con el parametro --expires-in en segundos (por defecto 3600 segs, max 604800 segs - 168 horas)
+- Los usuarios a los que se les de una URL pre-firmada heredan los permisos del usuario que genero la URL para GET / PUT
+- Ejemplos:
+	- Permite que solo los usuarios que han iniciado sesion descarguen un video premium de tu bucket de S3
+	- Permitir que una lista de usuarios cambiantes descargue archivos generando URLs dinamicamente
+	- Permitir temporalmente que un usuario suba un archivo a una ubicacion precisa de tu buket S3
