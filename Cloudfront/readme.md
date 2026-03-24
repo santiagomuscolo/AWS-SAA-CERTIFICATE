@@ -94,3 +94,56 @@ La principal diferencia yace en que cloudfront es ideal para la entrega de conte
 	- Es adecuado para casos de uso no HTTP, como juegos UDP o IoT (MQTT) o voz sobre IP
 	- Bueno para casos de uso HTTP que requieren de IPs estaticas
 	- Bueno para casos de uso de HTTP que requieran una conmutacion por error regional determinista y rapida.
+
+	### Quiz
+Question 1:
+Tienes una distribución de CloudFront que sirve a tu sitio web alojado en una flota de instancias EC2 detrás de un Load Balancer de aplicaciones. Todos tus clientes son de Estados Unidos, pero has descubierto que algunas peticiones maliciosas proceden de otros países. ¿Qué deberías hacer para permitir sólo a los usuarios de Estados Unidos y bloquear a los de otros países?
+- Utilizaria la restriccion geografica de cloudfront
+
+Question 2:
+Tienes un sitio web estático alojado en un bucket de S3. Has creado una distribución de CloudFront que apunta a tu bucket de S3 para atender mejor las peticiones y mejorar el rendimiento. Después de un tiempo, te has dado cuenta de que los usuarios pueden seguir accediendo a tu sitio web directamente desde el bucket de S3. Quieres obligar a los usuarios a acceder al sitio web sólo a través de CloudFront. ¿Cómo lo conseguirías?
+- Configuraria la distribucion de cloudfront y crearia una OAC, luego actualizaria la politica del bucket S3 para solo aceptar peticiones del usuario OAC de la distribucion cloudfront
+
+Question 3:
+¿Qué hace esta política de bucket S3?
+
+`{`
+
+     `"Version": "2012-10-17",`
+
+     `"Id": "Mystery policy",`
+
+     `"Statement": [{`
+
+        `"Sid": "What could it be?",`
+
+        `"Effect": "Allow",`
+
+        `"Principal": {`
+
+           `"Service": "cloudfront.amazonaws.com"`
+
+        `},`
+
+        `"Action": "s3:GetObject",`
+
+        `"Resource": "arn:aws:s3:::examplebucket/*",            "Condition": {                 "StringEquals": {                    "AWS:SourceArn":  "arn:aws:cloudfront::123456789012:distribution/EDFDVBD6EXAMPLE"              }         }`
+
+   `}]`
+
+`}`
+
+- Permite que cloudfront desde su identidad de Acceso Al Origen pueda ver el contenido del bucket
+
+Question 4:
+Un sitio web de WordPress está alojado en un conjunto de instancias de EC2 en un Grupo de Auto Scaling de EC2 y está encabezado por una Distribución de CloudFront que está configurada para almacenar en caché el contenido durante 3 días. Has lanzado una nueva versión del sitio web y quieres lanzarla inmediatamente a producción sin esperar 3 días a que caduque el contenido almacenado en caché. ¿Cuál es la forma más fácil y eficaz de resolver esto?
+- Invalidar la cache de cloudfront
+
+Question 5:
+Una empresa está desplegando un sitio web para compartir medios en AWS. Van a utilizar CloudFront para entregar el contexto con baja latencia a sus clientes, que se encuentran en EE.UU. y en Europa solamente. Después de un tiempo hay un gran coste para CloudFront. ¿Qué característica de CloudFront permite disminuir los costes al dirigirse sólo a EE.UU. y Europa?
+- Las clases de precios
+
+Question 6:
+Una empresa está migrando una aplicación web a AWS Cloud y va a utilizar un conjunto de instancias EC2 en un EC2 Auto Scaling Groups. La aplicación web está formada por múltiples componentes, por lo que necesitarán una función de enrutamiento basada en el host para dirigirla a componentes específicos de la aplicación web. Esta aplicación web es utilizada por muchos clientes y, por tanto, la aplicación web debe tener una dirección IP estática para que pueda ser incluida en la lista blanca de los firewalls de los clientes. Como los clientes están distribuidos por todo el mundo, la aplicación web también debe proporcionar una baja latencia a todos los clientes. ¿Qué servicio de AWS puede ayudarte a asignar una dirección IP estática y proporcionar una baja latencia en todo el mundo?
+- AWS Global accelerator + ALB
+
