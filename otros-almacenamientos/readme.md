@@ -172,3 +172,122 @@ Edge computing es el procesamiento de datos lo mas cerca posible de donde se gen
 - Objeto
 	- S3
 	- Glacier
+
+	### Storage Gateway
+- AWS esta impuslando el concepto de "nube hibrida"
+	- Parte de la infraestructura esta en el Cloud
+	- Parte de la infraestructura esta en las instalaciones
+- Esto puede deberse a:
+	- Largas migraciones a el Cloud
+	- Requisitos de seguridad
+	- Requisitos de normativa
+	- Estrategia de IT
+- S3 es una tecnologia de almacenamiento propia (a diferencia de EFS/NFS), asi que para exponer los datos de S3 en las instalaciones se usara Storage Gateway
+
+**Opciones nativas de la nube de almacenamiento de AWS**
+- Bloque
+	- EBS (Elastic Block Storage)
+	- Almacen de instancias EC2
+- Fichero
+	- EFS (Elastic File System)
+	- FSx
+- Objeto
+	- S3
+	- Glacier
+
+**AWS Storage Gateway**
+- Puente entre los datos locales y los de el cloud
+- Casos de uso:
+	- recuperacion de desastres
+	- copias de seguridad y restauracion
+	- almacenamiento por niveles
+	- cache local y acceso a archivos de baja latencia
+- Tipos de gateway de almacenamiento:
+	- S3 file gateway
+	- gateway de archivos FSx
+	- gateway de volumen
+	- Tape gateway
+
+**S3 Storage Gateway**
+- Los buckets S3 configurados son accesibles mediante protocolos NFS Y SMB
+- Los datos utilizados mas recientemente se almacenan en cache en el File Gateway
+- Soporta Estandar S3, Estandar S3 IA, S3 One Zone A, S3 Intelligent Tiering
+- Transicion a S3 Glacier mediante una politica de ciclo de vida
+- Acceso a buckets mediante roles IAM para cada Gateway de archivos
+- El protocolo SMB tiene integracion con Active Directory (AD) para la autenticacion de usuarios
+- ![[Pasted image 20260325161150.png]]
+
+**FSx File Gateway**
+- Acceso nativo a Amazon FSx para windows file server
+- Cache local para los datos a los que se accede con frecuencia
+- Compatibilidad nativa con Windows (SMB, NTFS, Active Directory, ...)
+- Util para grupos de archivos compartidos y directorios personales
+- ![[Pasted image 20260325161345.png]]
+
+**Volume Gateway**
+- Almacenamiento en bloque con protocolo iSCSI respaldado por S3
+- Respaldado por Snapshots de EBS que pueden ayudar a restaurar los volumenes locales
+- **Volumenes de cache**: acceso de baja latencia a los datos mas recientes
+- **Volumenes almacenados**: todo el conjunto de datos esta en las instalaciones, copias de seguridad programadas en S3
+- ![[Pasted image 20260325161643.png]]
+
+**Tape Gateway**
+- Algunas empresas tienen procesos de copia de seguridad que utilizan cintas fisicas
+- Con Tape Gateway, las empresas utilizan los mismos procesos pero en el cloud
+- Biblioteca virtual de cintas (VTL) respaldada por Amazon S3 y Glacier
+- Realiza copias de seguridad de los datos utilizando los procesos existentes basados en cintas (y la interfaz iSCSI)
+- Funciona con los principales proveedores de sogtware de copia de seguridad
+- ![[Pasted image 20260325162012.png]]
+
+**Dispositivo de hardware**
+- Utilizar Storage Gateway significa que necesitas virtualizacion in situ
+- Si no, puedes utilizar un dispositivo de hardware Storage Gateway (vendidos por amazon)
+- Funciona con File Gateway, Volume Gateway, Tape Gateway
+- Tiene lso recursos necesarios de CPU, memoria, red y cache SSD
+- Util para copias de seguridad NFS diarias en centros de datos pequenos
+
+![[Pasted image 20260325162458.png]]
+
+**Protocolos nombrados**
+NFS, SMB, iSCSI/VTL son protocolos de acceso a almacenamiento, que trabajan en diferentes niveles:
+- File level (nivel de archivos):
+	- NFS (Network File System): protocolo para compartir archivos en red muy usado en linux/unix.
+	- SMB (Server Message Block): Protocolo de comparticion de archivos en windows
+- Block level (nivel disco)
+	- iSCSI (Internet Small Computer Systems Interface): protocolo que permite usar almacenamiento remoto como si fuera un disco local.
+	- iSCSI VTL (Virtual Tape Library): una simulacion de una libreria de cintas (tapes) usando el protocolo Internet Small Computer Systems interface
+
+### Familia de transferencia de AWS
+- Un servicio totalmente gestionado para la transferencia de archivos hacia y desde amazon S3 o Amazon EFS mediante el protocolo FTP
+- Protocolos soportados:
+	- AWS Transfer para FTP (protocolo de transferencia de archivos)
+	- AWS transfer para FTPS (protocolo de transferencia de archivos con SSL)
+	- AWS transfer para SFTP (protocolo de transferencia de archivos seguro)
+- Infraestructura administrada, escalable, fiable, altamente disponible (multi-AZ)
+- Paga por endpoint aprovisionado por hora + transferencias de datos en GB
+- Almacena y gestiona las credenciales de los usuarios dentro del servicio
+- Se integra con los sistemas de autenticacion existentes (Microsoft Advice Directory, LDAP, Okta, Amazon Cognito, personalizado)
+- Uso: compartir archivos, conjuntos de datos publicos, CRM, ERP
+- ![[Pasted image 20260325204033.png]]
+
+### Vision general de DataSync
+- Mover grandes cantidades de datos hacia y desde
+	- En las instalaciones/otra nube a AWS (NFS, SMB, HDFS, API S3...) - necesita agente
+	- De AWS a AWS (diferentes servicios de almacenamiento) - no necesita agente
+- Puedes sincronizar a:
+	- Amazon S3 (Cuaqluier clase de almacenamiento - incluido Glacier)
+	- Amazon EFS
+	- Amazon FSx
+- Las tareas de replicacion son programables por hora, dia, semana
+- Se conservan los permisos y metadatos de los archivos (NFS POSIX, SMB...)
+- Una tarea de agente puede utilizar 10GBps, se puede configurar un limite de ancho de banda
+- ![[Pasted image 20260325204659.png]]
+- ![[Pasted image 20260325204617.png]]
+
+### Comparacion
+![[Pasted image 20260325205056.png]]
+
+Definiciones que no conocia:
+- POSIX: es un estandar (Portable Operating System Interface) que define como deberia comportarse un sistema operativo tipo unix, incluyendo: gestion se archivos, permisos, procesos y APIs del sistema. Cada archivo tiene permisos como lectura, escritura, ejecucion y presenta una jerarquizacion y disponibilizacion de funciones.
+- Sistema HDFS: Es un sistema de archivos distribuido, disenado para manejar grandes volumenes de datos forma parte del ecosistema "Apache Hadoop"
+- Termino "sistema de archivos distribuido": el termino distribuido quiere decir que los datos no se guardan en un solo "nodo" sino que estos estan repartidos en varios nodos que trabajan en conjunto como si fueran un solo sistema
