@@ -291,3 +291,76 @@ Definiciones que no conocia:
 - POSIX: es un estandar (Portable Operating System Interface) que define como deberia comportarse un sistema operativo tipo unix, incluyendo: gestion se archivos, permisos, procesos y APIs del sistema. Cada archivo tiene permisos como lectura, escritura, ejecucion y presenta una jerarquizacion y disponibilizacion de funciones.
 - Sistema HDFS: Es un sistema de archivos distribuido, disenado para manejar grandes volumenes de datos forma parte del ecosistema "Apache Hadoop"
 - Termino "sistema de archivos distribuido": el termino distribuido quiere decir que los datos no se guardan en un solo "nodo" sino que estos estan repartidos en varios nodos que trabajan en conjunto como si fueran un solo sistema
+
+### Quiz
+Question 1:
+Necesitas mover cientos de Terabytes a Amazon S3, y luego procesar los datos utilizando una flota de instancias EC2. Tienes una banda ancha de 1 Gbit/s. Te gustaría mover los datos más rápido y posiblemente procesarlos mientras están en tránsito. ¿Qué recomiendas?
+- Utilizando snowball edge
+
+Question 2:
+Quieres exponer un almacenamiento prácticamente infinito para tus copias de seguridad en cinta. Quieres mantener el mismo software que estás utilizando y quieres una interfaz compatible con iSCSI. ¿Qué utilizas?
+- AWS Storage gateway - tape gateway
+
+Question 3:
+Tus servidores EC2 Windows necesitan compartir algunos datos teniendo montado un Sistema de Archivos de Red que respete los mecanismos de seguridad de Windows y tenga integración con Microsoft Active Directory. ¿Qué recomiendas?
+- Amazon FSx para Windows (Servidor de archivos)
+
+Question 4:
+Tienes cientos de Terabytes que quieres migrar a AWS S3 lo antes posible. Has intentado utilizar el ancho de banda de tu red y tardarás unas 3 semanas en completar el proceso de carga. ¿Cuál es el enfoque recomendado en esta situación?
+- AWS Snowball edge
+
+Question 5:
+Tienes un gran conjunto de datos almacenado en S3 al que quieres acceder desde los servidores locales utilizando el protocolo NFS o SMB. Además, quieres autenticar el acceso a estos archivos a través de Microsoft AD local. ¿Qué utilizarías?
+- AWS Storage Gateway - S3
+
+Question 6:
+Estás planeando migrar la infraestructura de tu empresa de las instalaciones a la Cloud de AWS. Tienes un Microsoft Windows File Server on-premise que quieres migrar. ¿Cuál es el servicio de AWS más adecuado que puedes utilizar?
+- Amazon FSx para windows (servidor de archivos)
+
+Question 7:
+Te gustaría tener un sistema de archivos distribuido compatible con POSIX que te permita maximizar las IOPS para realizar algunas investigaciones informáticas de alto rendimiento (HPC) y genómicas. Este sistema de archivos tiene que escalar fácilmente a millones de IOPS. ¿Qué recomiendas?
+- Amazon FSx para Lustre
+
+Question 8:
+¿Qué opción de despliegue del sistema de archivos FSx te proporciona un almacenamiento a largo plazo que se replica dentro de AZ?
+- Sistema de archivos persistente
+
+Question 9:
+¿Cuál de los siguientes protocolos **NO** está soportado por AWS Transfer Family?
+- TLS
+
+Question 10:
+Una empresa utiliza muchos archivos y datos que se almacenan en un almacenamiento FSx para Windows File Server en AWS. Esos archivos son utilizados actualmente por los recursos alojados en AWS. Es necesario que se pueda acceder a esos archivos en las instalaciones con una baja latencia. ¿Qué servicio de AWS puede ayudarte a conseguirlo?
+- FSx File Gateway
+
+Question 11:
+Un arquitecto de soluciones está trabajando en la planificación de la migración de una empresa emergente de las instalaciones a AWS. Actualmente, su infraestructura consiste en muchos servidores y 30 TB de datos alojados en un almacenamiento NFS compartido. Ha decidido utilizar Amazon S3 para alojar los datos. ¿Qué servicio de AWS puede migrar eficazmente los datos de las instalaciones a S3?
+- AWS data sync
+
+Question 12:
+¿Qué servicio de AWS es el más adecuado para migrar una gran cantidad de datos de un bucket de S3 a un sistema de archivos EFS?
+- AWS data sync
+
+Question 13:
+Una empresa de Machine Learning está trabajando en un conjunto de conjuntos de datos que están alojados en buckets S3. La empresa ha decidido hacer públicos esos conjuntos de datos para que sean útiles para otros en su investigación, pero no quiere configurar el bucket S3 para que sea público. Y esos conjuntos de datos deben ser expuestos a través del protocolo FTP. ¿Qué pueden hacer para cumplir el requisito de forma eficiente y con el menor esfuerzo?
+- Utilizar la familia de transferencia de AWS
+
+Question 14:
+Amazon FSx para NetApp ONTAP es compatible con los siguientes protocolos, EXCEPTO ..................
+- FTP
+
+Question 15:
+¿Qué servicio de AWS es el más adecuado cuando se migra de un sistema de archivos ZFS on-premise a AWS?
+- Amazon FSx para OpenZFS
+
+Question 16:
+Una empresa está ejecutando Amazon S3 File Gateway para alojar sus datos en buckets S3 y puede montarlos en sus instalaciones mediante SMB. Actualmente, los datos están alojados en la clase de almacenamiento S3 Standard, y tienen la necesidad de reducir los costes de S3. Por ello, han decidido migrar algunos de esos datos a S3 Glacier. ¿Cuál es la forma más eficiente que pueden utilizar para mover los datos a S3 Glacier automáticamente?
+- Con una politica de ciclo de vida de S3
+
+ME EQUIVOQUE EN:
+- pregunta 13:
+  La familia de transferencia de aws tambien sirve para exponer conjuntos a traves del protocolo
+- pregunta 11:
+  con dataSync los datos de las instalaciones son facilmente migrables a S3
+- pregunta 6:
+  si el sistema de archivos de las instalaciones son Microsoft Windows File Server FSx es buena opcion por que se adapta a ese ecosistema en el cloud
