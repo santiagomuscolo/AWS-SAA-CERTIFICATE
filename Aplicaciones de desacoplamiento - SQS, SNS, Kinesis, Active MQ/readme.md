@@ -84,3 +84,91 @@ Amazon SQS - Seguridad
 - El tiempo de espera puede oscilar entre 1 y 20 segundos (preferiblemente 20 segundos)
 - El sondeo largo es preferible al corto
 - Puede activarse a nivel de cola o a nivel de API utilizando WaitTimeSeconds
+
+## SQS - Colas FIFO
+- FIFO: First in first out (ordenacion de los mensajes en la cola)
+- Rendimiento limitado: 300 msg/s sin procesamiento por lotes, 3000 msg/s con procesamiento por lotes.
+- Capacidad de envio exactamente una vez (eliminando los duplicados)
+- El consumidor procesa los mensajes en orden
+
+## SQS - ASG
+sqs nos brinda la posibilidad de mediante una alarma de cloudwatch validado por una cloudwatch metric poder hacer auto-escalar un grupo ASG de instancias, sin embargo, esto presenta un inconveniente... si nosotros tuviesemos miles de millones de requests por segundo probablemente en el proceso de insercion en la base de datos algunas transacciones se perderian, esto es solucionable usando SQS como buffer de escrituras en la base de datos:
+![[Pasted image 20260330103014.png]]
+
+es asi que si alguna transaccion no llegase a estar en la DB permaneceria en SQS ya que es infinitamente escalable y confiable.
+
+para finalizar el concepto mas relevante de SQS es el desacoplamiento de los diversos niveles de la aplicacion, permitiendonos una mejor usabilidad y escalabilidad:
+![[Pasted image 20260330103200.png]]
+
+## Amazon Simple Notification Service (SNS)
+![[Pasted image 20260330103438.png]]
+
+- El productor de eventos solo envia mensajes a un topic SNS
+- Tantos "receptores de eventos" (suscriptores) como queramos para escuchar notificaciones del tema SNS
+- Cada suscriptor al tema recibira todos los mensajes (nota: nueva funcion para filtrar mensajes)
+- Hasta 12.500.000 subscribers por tema
+- Limite de 100.000 topics
+- ![[Pasted image 20260330103751.png]]
+- Muchos servicios de AWS pueden enviar datos directamente a SNS para notificaciones:
+	- CloudWatch alarms
+	- AWS budgets
+	- Lambda
+	- ASG Notifications
+	- S3
+	- DynamoDB
+	- CloudFormation (state changes)
+	- AWS DMS (new republic)
+	- RDS Events
+
+**Como publicar**
+- Publicacion de temas (mediante el SDK)
+	- Crear un tema
+	- Crear una suscripcion (o varias)
+	- Publicar en el tema
+- Publicacion directa (para aplicaciones moviles SDK)
+	- Crear una aplicacion de plataforma
+	- Crear un endpoint de plataforma
+	- Publicar en el endpoint de la plataforma
+	- Funciona con Google GCM, Apple APNS, Amazon ADM...
+
+**Seguridad**
+- Cifrado:
+	- Cifrado en vuelo mediante API HTTPS (TLS/SSL)
+	- Cifrado en reposo mediante claves KMS
+	- Cifrado del lado del cliente si el desea realizar el cifrado/descifrado por si mismo.
+- Controles de acceso: Politicas de IAM para regular el acceso a la API SNS
+- Politicas de acceso SNS (similar a las politicas del bucket S3)
+	- Util para el acceso entre cuentas a temas SNS
+
+## SNS Y SQS: Fan Out
+Fan out es el concepto de integracion de SNS + SQS:
+- Se realiza un push una sola vez en SNS, este se recibe en todas las colas SQS que son suscriptores
+- Totalmente desacoplado, sin perdida de datos
+- SQS permite: persistencia de datos, procesamiento diferido y reintentos de trabajo.
+- Posibilidad de agregar mas suscriptores SQS con el tiempo.
+- Asegurate de que la politica de acceso a la cola SQS permite que SNS pueda escribir
+
+**Aplicacion: Eventos S3 a multiples colas**
+- Para la misma combinacion de: **tipo de evento** (p.e. creacion de objeto) y prefijo (p.e. imagenes/) solo puedes tener una regla de Evento S3.
+- Si quieres enviar el mismo evento S3 a muchas colas SQS, utiliza Fan-out
+- ![[Pasted image 20260330113528.png]]
+
+**Aplicacion: SNS a Amazon S3 a traves de Kinesis Data Firehose**
+- SNS puede enviar a Kinesis y por lo tanto podemos tener la siguiente arquitectura de soluciones:
+  ![[Pasted image 20260330113731.png]]
+
+**Amazon SNS - Tema (topic) FIFO
+![[Pasted image 20260330113909.png]]
+- Caracteristicas similares a SQS FIFO:
+	- **Ordenacion**: por ID de grupo de mensajes (se ordenan todos los mensajes del mismo grupo)
+	- **Deduplicacion**: mediante ID de deduplicacion o deduplicacion basada en contenido.
+- Solo puede tener colas SQS FIFO como suscriptores
+- Rendimiento limitado (el mismo que SQS FIFO)
+- FIFO nace con la finalidad de solucionar el probelma fan-out + ordenacion + deduplicacion:
+  ![[Pasted image 20260330114230.png]]
+
+**Filtrado de mensajes**
+- Politica JSON utilizada para filtrar lso mensajes enviados a las suscripciones del tema SNS
+- Si una suscripcion no tiene una politica de filtrado, recibe todos los mensajes
+- ![[Pasted image 20260330114532.png]]
+
