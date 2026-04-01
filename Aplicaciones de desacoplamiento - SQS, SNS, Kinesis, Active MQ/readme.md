@@ -172,3 +172,132 @@ Fan out es el concepto de integracion de SNS + SQS:
 - Si una suscripcion no tiene una politica de filtrado, recibe todos los mensajes
 - ![[Pasted image 20260330114532.png]]
 
+## Vision general de Amazon Kinesis
+- Facilita la recopilacion, el procesamiento, y el analisis de datos de flujo continuo en tiempo real.
+- Ingesta de datos en tiempo real como: registros de aplicaciones, metricas, secuencias de clics de sitios web, datos telemetricos de IoT...
+- Servicios:
+	- Kinesis Data Streams: captura, procesa y almacena flujos de datos.
+	- Kinesis Data Firehose: carga flujos de datos en almacenes de datos de AWS.
+	- Kinesis Data Analytics: analiza flujos de datos con SQL o Apache Flink.
+	- Kinesis Video Streams: captura, procesa y almacena transmisiones en vivo.
+
+## Kinesis Data Streams
+Es una forma de transmitir big data en nustros sistemas
+![[Pasted image 20260401103958.png]]
+
+- Retencion entre 1 dia y 365 dias.
+- Posibilidad de volver a procesar (reproducir) los datos.
+- Una vez que los datos se insertan en kinesis, no pueden borrarse (inmutabilidad).
+- Los datos que comparten la misma particion van al mismo fragmento (ordenacion).
+- Productores: SDK de AWS, bibkioteca de productores de kinesis (KPL), agente de kinesis.
+- Consumidores: 
+	- Escriba el suyo propio: kinesis client library (KCL), AWS SDK.
+	- Administrados: AWS Lambda, Kinesis data firehose, kinesis data analytics.
+
+**Modos de capacidad**
+- **Modo aprovisionado**:
+	- Tu eliges el numero de shards aprovisionados, escala manualmente o usando API.
+	- Cada fragmento recibe 1 MB/s (o 1000 registros por segundo).
+	- Cada fragmento recibe 2 MB/s (consumo en fan-out clasico o mejorado).
+	- Se paga por cada fragmento aprovisionado por hora.
+- **Modo bajo demanda**
+	- No es necesario aprovisionar ni gestionar la capacidad.
+	- Capacidad provisionada por defecto (4 MB/s de entrada o 4000 registros por segundo)
+	- Escala automaticamente en funcion del pico de rendimiento observado durante los ultimos 30 dias.
+	- Pago por flujo por hora y entrada/salida de datos por GB.
+
+**Seguridad**
+- Control de acceso / autorizacion mediante politicas IAM
+- Cifrado en vuelo mediante endpoints HTTPS
+- Cifrado en reposo mediante KMS
+- Puede implementar el cifrado/descifrado de datos en el lado del cliente.
+- Endpoints VPC disponibles para que kinesis acceda dentro de VPC
+- Supervision de las llamadas a la API mediante CloudTrail.
+
+## Vision general de Kinesis Data Firehose
+es un servicio que toma los datos de los productores y escribe los datos en los destinos sin que nosotros tengamos que escribir ningun tipo de codigo.
+![[Pasted image 20260401122658.png]]
+
+- Servicio totalmente administrado, sin administracion, escalado automatico, sin servidor.
+	- AWS: redshift, s3, elasticSearch
+	- Servicios de terceros: datadog, new relic, mongo db, splunk...
+	- Personalizado: Enviar a cualquier punto final HTTP.
+- Pague por los datos que pasan por Firehose
+- Casi en tiempo real:
+	- Latencia minima de 60 segundos por lotes no completos
+	- Un minimo de 1MB de datos a la vez
+- Admite muchos formatos de datos, conversiones, transformaciones y compresion.
+- Admite transformaciones de datos personalizadas mediante AWS lambda.
+- Puede enviar datos fallidos o todos los datos a un bucket S3 de backup.
+
+**Kinesis data streams vs data firehose**
+- Kinesis data streams:
+	- Servicio de streaming para la ingesta a escala.
+	- Escribir codigo personalizado (productor/consumidor)
+	- En tiempo real ( - 200ms)
+	- Gestion del escalado (division/fusion de fragmentos)
+	- Almacenamiento de datos de 1 a 365 dias.
+	- Capacidad de reproduccion.
+- Kinesis firehose:
+	- Carga de datos de streaming en S3 / RedShift / ES / terceros / HTTP personalizado.
+	- Totalmente gestionado.
+	- Casi en tiempo real (tiempo de buffer de min 60 segundos)
+	- Escalado automatico
+	- Sin almacenamiento de datos
+	- No soporta capacidad de repeticion
+
+## Ordenacion de datos para kinesis vs SQS FIFO
+- Imagina que tienes 100 camiones (camion_1, camion_2, camion_100) en la carretera enviando sus posiciones GPS regularmente a AWS.
+- Se desea consumir los datos en orden para cada camion, de modo que pueda seguir su movimiento con precision.
+- Como entonces enviamos los datos a kinesis? la respuesta es con un valor de 'Partition Key' del "truck_id" ("camion_id").
+- La misma clave ira siempre al mismo fragmento
+- ![[Pasted image 20260401130939.png]]
+
+**Ordenar datos en SQS**
+- Para SQS estandar, no hay ordenacion.
+- Para SQS FIFO, si no se utiliza un ID de grupo, los mensajes se consumen en el orden en que se envian, con un solo consumidor.
+- ![[Pasted image 20260401131306.png]]
+- Si se desea escalar el numero de consumidores, pero quieres que los mensajes esten "agrupados" cuando se relacionan entre si se puede utilizar un "ID" de grupo (similar a la clave de particion en kinesis)
+- ![[Pasted image 20260401131403.png]]
+
+**Ordenacion Kinesis vs SQS**
+- Supongamos que tenemos 100 camiones, 5 fragmentos kinesis, 1 SQS FIFO
+- Kinesis data streams:
+	- Por termino medio, tendras 20 camiones por fragmento.
+	- Los camiones tendran sus datos ordenados dentro de cada fragmento.
+	- La cantidad maxima de consumidores en paralelo que podemos tener serian 5 (5 fragmentos de 20 camiones cada uno, 1 consumidor por fragmento).
+	- Puede recibir hasta 5 MB/s de datos (1MB/s por fragmento).
+- SQS FIFO:
+	- Solo tenemos 1 cola SQS FIFO.
+	- Tendriamos 100 IDs de grupo.
+	- Podriamos tener hasta 100 consumidores 1 por Group ID.
+	- Tendriamos hasta 300 mensajes por esgundo (o 3000 si usamos batching)
+
+## SQS vs SNS vs Kinesis
+- SQS:
+	- Los consumidores "tiran de los datos".
+	- Los datos se borran despues de ser consumidos.
+	- Podemos tener tantos trabajadores (consumidores) como queramos
+	- No es necesario aprovisionar rendimiento.
+	- Garantias de ordenacion solo en colas FIFO.
+	- Capacidad de retardo de mensajes individuales.
+- SNS:
+	- Envio de datos a muchos suscriptores.
+	- Hasta 12.500.000 suscriptores.
+	- Los datos no se conservan (se pierden si no se entregan).
+	- Pub/Sub.
+	- Hasta 100.000 Topics.
+	- No es necesario aprovisionar caudal.
+	- Se integra con SQS para un patron de arquitectura fan-out.
+	- Capacidad FIFO para SQS FIFO.
+- Kinesis:
+	- Estandar: extraer datos (2MB por fragmento).
+	- Fan-out reforzado: datos push (2MB por fragmento y consumidor).
+	- Posibilidad de reproducir los datos.
+	- Pensado para big data en tiempo real, analisis y ETL.
+	- Ordenacion a nivel de fragmento.
+	- Los datos caducan a los X dias.
+	- Modo aprovisionado o modo de capacidad bajo demanda.
+- Cuando se refiere a "aprovisionar" quiere decir definir manualmente cuanta capacidad/escala va a tener un servicio antes de usarlo.
+- Luego un shard que es aquello que se aprovisiona en Kinesis hace referencia a una "unidad de capacidad" dentro de un stream, este almacena temporalmente datos (stream), procesa registros en orden (dentro del shard), permite paralelismo (varios shards = procesamiento paralelo).
+- Y con stream nos referimos a un flujo continuo de datos en tiempo real (es decir, datos que estan llegando constantemente)
