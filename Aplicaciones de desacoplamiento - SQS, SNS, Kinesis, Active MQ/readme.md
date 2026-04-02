@@ -301,3 +301,63 @@ es un servicio que toma los datos de los productores y escribe los datos en los 
 - Cuando se refiere a "aprovisionar" quiere decir definir manualmente cuanta capacidad/escala va a tener un servicio antes de usarlo.
 - Luego un shard que es aquello que se aprovisiona en Kinesis hace referencia a una "unidad de capacidad" dentro de un stream, este almacena temporalmente datos (stream), procesa registros en orden (dentro del shard), permite paralelismo (varios shards = procesamiento paralelo).
 - Y con stream nos referimos a un flujo continuo de datos en tiempo real (es decir, datos que estan llegando constantemente)
+
+## Amazon MQ
+- SQS, SNS son servicios "nativos de la nube": protocolos propietarios de AWS
+- Las aplicaciones tradicionales que se ejecutan desde las instalaciones pueden utilizar protocolos abiertos como: MQTT (Message Queuing Telemetry Transport), AMQP (Advanced Message Queuing Protocol), STOMP (Simple Text Oriented Messaging Protocol), OpenWire, WSS (Web Socket Secure)
+- Al migrar a la nube, en lugar de redisenar la aplicacion para utilizar SQS y SNS, podemos utilizar amazon MQ.
+- Amazon MQ es un servicio de intermediario de mensjaes administrado para RabbitMQ y ActiveMQ.
+- Amazon MQ no "escala" tanto como SQS/SNS
+- Amazon MQ se ejecuta en servidores, puede ejecutarse en Multi-AZ con failover.
+- Amazon MQ tiene caracteristicas de cola SQS y caracteristicas de topicos SNS.
+- ![[Pasted image 20260402154750.png]]
+
+## Quiz
+
+Question 1:
+Tienes un sitio web de comercio electrónico y te estás preparando para el Black Friday, que es la mayor venta del año. Esperas que tu tráfico se multiplique por 100. Tu sitio web ya utiliza una cola SQS estándar, y estás ejecutando una flota de instancias EC2 en un Auto Scaling Groups para consumir mensajes SQS. ¿Qué debes hacer para preparar tu SQS Queue?
+- No hacer nada SQS escala automaticamente
+
+Question 2:
+Tienes una SQS Queue en la que cada consumidor sondea 10 mensajes a la vez y termina de procesarlos en 1 minuto. Al cabo de un tiempo, te has dado cuenta de que los mismos mensajes SQS son recibidos por diferentes consumidores, lo que hace que tus mensajes se procesen más de una vez. ¿Qué deberías hacer para resolver este problema?
+- Aumenta el tiempo de espera de la visibilidad del mensaje una vez que fue consumido de la cola.
+
+Question 3:
+¿Qué tipo de cola SQS permite que tus mensajes se procesen exactamente una vez y en orden?
+- Cola SQS FIFO
+
+Question 4:
+Tienes 3 aplicaciones diferentes a las que te gustaría enviar el mismo mensaje. Las 3 aplicaciones utilizan SQS. ¿Cuál es el mejor enfoque que podrías elegir?
+- Utilizar el patron SNS + SQS Fan Out
+
+Question 5:
+Tienes un flujo de datos Kinesis con 6 shards provisionados. Este flujo de datos suele recibir 5 MB/s de datos y enviar 8 MB/s. De vez en cuando, su tráfico se multiplica por dos y obtienes una excepción `ProvisionedThroughputExceeded`. ¿Qué debes hacer para resolver el problema?
+- Se deben agregar mas Fragmentos (shards) ya que los limites de capacidad estan definidos por el numero de fragmentos que contiene el flujo de datos.
+
+Question 6:
+Tienes un sitio web en el que quieres analizar los datos del flujo de clics, como la secuencia de clics que hace un usuario, la cantidad de tiempo que pasa un usuario y dónde empieza y cómo termina la navegación. Has decidido utilizar Amazon Kinesis, así que has configurado el sitio web para que envíe estos datos de clickstream a un flujo de datos de Kinesis. Al comprobar los datos enviados a tu flujo de datos Kinesis, has descubierto que los datos de los usuarios no están ordenados y que los datos de un usuario individual están repartidos en muchos fragmentos. ¿Cómo solucionarías este problema?
+- Para cada registro enviado a kinesis debe asociarse una partition key que represente la identidad del usuario.
+
+Question 7:
+Estás ejecutando una aplicación que produce una gran cantidad de datos en tiempo real que quieres cargar en S3 y Redshift. Además, estos datos necesitan ser transformados antes de ser entregados a su destino. ¿Cuál es la mejor arquitectura que elegirías?
+- Kinesis data streams + Kinesis data firehose
+
+Question 8:
+¿Cuál de los siguientes **NO** es un soporte para AWS SNS?
+- Kinesis data streams aun no es compatible
+
+Question 9:
+¿Qué servicio de AWS te ayuda cuando quieres enviar notificaciones por correo electrónico a tus usuarios?
+- Amazon SNS
+
+Question 10:
+Estás ejecutando muchas aplicaciones de microservicios en las instalaciones y se comunican mediante un broker de mensajes que soporta el protocolo MQTT. Estás planeando migrar estas aplicaciones a AWS sin rediseñar las aplicaciones ni modificar el código. ¿Qué servicio de AWS te permite obtener un broker de mensajes gestionado que soporte el protocolo MQTT?
+- Amazon MQ (soporta APIs estandar del sector, como JMS (java messaging service) y NMS (.net messaging service) y protocolos de mensajeria como AMQP (Advanced messaging queuing protocol), STOMP (simple text oriented messaging protocol), MQTT (message queuing telemetry transport) y WSS)
+
+Question 11:
+Una empresa de comercio electrónico se está preparando para una gran promoción de marketing que supondrá millones de transacciones. Su sitio web está alojado en instancias EC2 en un Auto Scaling Groups y están utilizando Amazon Aurora como base de datos. La base de datos Aurora tiene un cuello de botella y han fallado muchas transacciones en la última promoción que han hecho, ya que tenían muchas transacciones y la base de datos Aurora no estaba preparada para manejar esas transacciones excesivas. ¿Qué recomiendas para manejar esas transacciones y evitar las transacciones fallidas?
+- Utiliza SQS como buffer para escribir en Aurora (un buffer es una memoria temporal donde se guardan los datos antes de moverlos a otro lugar)
+
+Question 12:
+Una empresa está utilizando Amazon Kinesis Data Streams para ingerir los datos del flujo de clics y luego hacer algunos procesos analíticos sobre ellos. Hay una campaña en los próximos días y se espera que el tráfico crezca 100 veces en menos de 5 minutos. ¿Qué modo de capacidad de Kinesis Data Stream recomiendas?
+- Modo bajo demanda
