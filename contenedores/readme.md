@@ -78,3 +78,87 @@ Entiendase Fargate como un servicio donde lanzaremos contenedores, donde:
 
 **datos que no sabia**
 Cloudformation es un sevicio IaC (infraestructura como codigo) que permite definir, modelar y aprovisionar recursos de AWS usando templates JSON y YAML.
+
+## Amazon ECS - Auto Scaling
+- Aumentar/disminuir automaticamente el numero deseado de tareas ECS.
+- Amazon ECS Auto Scaling utiliza **AWS Application Auto Scaling**
+	- Utilizacion media de la CPU del servicio ECS.
+	- Utilizacion media de memoria del servicio ECS - Escalado RAM.
+	- Recuento de solicitudes ALB por objetivo - metrica procedente del ALB
+- **Seguimiento de objetivo** - escala basada en el valor objetivo para una metrica especifica de CloudWatch.
+- **Escalado por pasos** - escalado basado en una alarma CloudWatch especifica.
+- **Escalado programado** - escalado basado en una fecha/hora especificada (cambios predecibles)
+- Autoescalado del servicio ECS (nivel de tarea) != Autoescalado de EC2 (nivel de instanica de EC2)
+- Fargate Auto Scaling es mucho mas facil de configurar ya que es serverless
+
+**Tipo de lanzamiento EC2 - Escalado automatico de instancias EC2**
+- Acomodar el escalado de servicios ECS agregando instancias EC2 subyacentes.
+- **Escalado automatico de grupos (Auto scaling group scaling)**
+	- Escala el ASG en funcion de la utilizacion de la CPU
+	- Con el tiempo se agregaran mas instancias EC2
+- Proveedor de capacidad de cluster ECS
+	- Se utiliza para aprovisionar y escalar automaticamente la infraestructura para tareas ECS
+	- Proveedor de capacidad emparejado con un ASG.
+	- Agrega instancias EC2 cuando falte capacidad (CPU, RAM)
+- ![[Pasted image 20260403183557.png]]
+
+## ECS - Soluciones de arquitectura
+![[Pasted image 20260403185409.png]]
+![[Pasted image 20260403185454.png]]![[Pasted image 20260403185547.png]]
+
+## Amazon ECR
+- ECR = Registro elastico de contenedores
+- Sirve para almacenar y administrar imagenes de Docker en AWS
+- Repositorio privado y publico (Amazon ECR Public Gallery)
+- Totalmente integrado con ECS, respaldado por Amazon S3
+- El acceso se controla a traves de IAM (errores de permiso => politica)
+- Soporta escaneo de vulnerabilidades de imagenes, versionado, etiquetas de imagenesm ciclo de vida de las imagenes...
+- ![[Pasted image 20260403190035.png]]
+
+## Amazon EKS
+- Amazon EKS = Servicio Amazon Elastic Kubernetes
+- Es una forma de lanzar clusteres de kubernetes administrados en AWS
+- Kubernetes es un sistema de codigo abierto que sirve para escalar, gestionar y desplegar automaticamente aplicaciones en contenedores (normalmente docker)
+- Es una alternativa a ECS, objetivo similar pero API diferente.
+- EKS soporta EC2 si se quieren desplegar nodos trabajadores o Fargate para despelgar contenedores sin servidor
+- Casos de uso: migracion de on=premise que utilicen kubernetes a AWS
+- Kubernetes es agnostico a la nube.
+- ![[Pasted image 20260403190652.png]]
+- Conceptos nuevos de esta imagen:
+	- PODS: un POD es la unidad minima desplegable dentro de un cluster, basicamente es donde viven uno o mas containers que necesitan trabajar juntos, incluyendo: 1 o mas contenedores, una ip propia dentro del cluster, almacenamiento compartido, configuracion de red compartida.
+	- En la imagen cada container es un pod por lo que dentro de 1 nodo EKS contariamos con 3 pods
+	- NGW (AWS NAT Gateway): permite que recursos en subredes privadas salgan a internet pero no puedan ser accedidos desde internet.
+	- 1 Cluster EKS  
+		├── Nodo 1 (AZ 1)  
+			│ ├── Pod  
+			│ ├── Pod  
+			│ └── Pod  
+		├── Nodo 2 (AZ 2)  
+			│ ├── Pod  
+			│ ├── Pod  
+			│ └── Pod  
+		└── Nodo 3 (AZ 3)  
+			├── Pod  
+			├── Pod  
+			└── Pod
+
+**Tipos de nodos**
+- Grupos de nodos gestionados
+	- Crea y gestiona nodos (instancias ec2) para ti.
+	- Los nodos forman parte de un ASG gestionado por EKS.
+	- Admite instancias bajo demanda o puntuales.
+- Nodos autogestionados
+	- Nodos creados por ti y registrados en el cluster EKS y gestionados por un ASG
+	- Puede utilizar una AMI preconstruida - Amazon EKS Optimized AMI
+	- Admite instancias bajo demanda o puntuales.
+- AWS Fargate
+	- No requiere mantenimiento; no se administran nodos.
+
+**Volumenes de datos**
+- Necesidad de especificar el StorageClass en el cluster EKS.
+- Aprovecha un controlador compatible con Container Storage Interface (CSI)
+- Compatible con
+	- EBS
+	- EFS (funciona con Fargate)
+	- FSx para Lustre
+	- FSx para NetApp ONTAP
