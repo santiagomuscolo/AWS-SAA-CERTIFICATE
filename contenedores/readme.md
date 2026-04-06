@@ -162,3 +162,46 @@ Cloudformation es un sevicio IaC (infraestructura como codigo) que permite defin
 	- EFS (funciona con Fargate)
 	- FSx para Lustre
 	- FSx para NetApp ONTAP
+
+	## AWS App runner
+- Servicio totalmente gestionado que facilita el despliegue de aplicaciones web y API a escala.
+- No se requiere experiencia en infraestructura
+- Empieza con tu codigo fuente o una imagen de docker
+- Crea y despliega automaticamente la apliacion web
+- Escalado automatico, alta disponibilidad, equilibrador de carga, cifrado
+- Soporte de acceso VPC
+- Conexion a servicios de bases de datos, cache y cola de mensajes
+- Casos de uso: aplicaciones web, API, microservicios, despliegues rapido en produccion
+
+## Quiz
+Question 1:
+Tienes varias aplicaciones basadas en Docker alojadas en las instalaciones que quieres migrar a AWS. No quieres aprovisionar ni administrar ninguna infraestructura; sólo quieres ejecutar tus contenedores en AWS. ¿Qué servicio de AWS debes elegir?
+- AWS Fargate
+
+Question 2:
+Amazon Elastic Container Service (ECS) tiene dos tipos de lanzamiento: .................. y ..................
+- EC2 y Fargate
+
+Question 3:
+Tienes una aplicación alojada en un Cluster ECS (Tipo de Lanzamiento EC2) donde quieres que tus tareas ECS suban archivos a un bucket S3. ¿Qué rol de IAM para tus tareas ECS debes modificar?
+- Rol de tarea ECS
+
+Question 4:
+Estás planeando migrar un sitio web de WordPress que se ejecuta en contenedores Docker desde las instalaciones a AWS. Has decidido ejecutar la aplicación en un clúster ECS, pero quieres que tus contenedores Docker accedan al mismo contenido del sitio web de WordPress, como archivos del sitio web, imágenes, vídeos, etc. ¿Qué recomiendas para conseguirlo?
+- Montar un volumen EFS ya que puede ser compartido entre diferentes instancias y tareas ECS y es multi-AZ
+
+Question 5:
+Estás desplegando una aplicación en un Cluster ECS formado por instancias EC2. Actualmente, el clúster aloja una aplicación que emite llamadas a la API de DynamoDB con éxito. Al añadir una segunda aplicación, que emite llamadas de API a S3, estás obteniendo problemas de autorización. ¿Qué deberías hacer para resolver el problema y garantizar una seguridad adecuada?
+- Crear un rol de tarea IAM para la nueva aplicacion
+
+Question 6:
+Estás migrando tus aplicaciones locales basadas en Docker a Amazon ECS. Estabas utilizando Docker Hub Container Image Library como repositorio de imágenes de contenedores. ¿Cuál es un servicio alternativo de AWS que está totalmente integrado con Amazon ECS?
+- Registro elastico de contenedores (ECR)
+
+Question 7:
+Amazon EKS soporta los siguientes tipos de nodo, EXCEPTO ....................
+- AWS Lambda
+
+Question 8:
+Un desarrollador tiene un sitio web y unas APIs en funcionamiento en su máquina local utilizando contenedores y quiere desplegar ambos en AWS. El desarrollador es nuevo en AWS y no sabe mucho sobre los diferentes servicios de AWS. ¿Cuál de los siguientes servicios de AWS permite al desarrollador construir e implementar el sitio web y las APIs de la manera más fácil según las mejores prácticas de AWS?
+- AWS App Runner
