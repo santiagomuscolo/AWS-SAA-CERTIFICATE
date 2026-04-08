@@ -174,3 +174,121 @@
 	- No es necesario planificar capacidad
 	- Pagas por lo que utilizas
 	- Ideal para cargas de trabajo impredecibles, picos repentinos pronunciados
+
+	## Detalles avanzados DynamoDB
+
+**Acelerador de DynamoDB (DAX)**
+- Cache en memoria totalmente gestionada, de alta disponibilidad y sin interrupciones para DynamoDB
+- Ayuda a resolver la congestion de lectura mediante almacenamiento en cache
+- Latencia de microsegundos para los datos almacenados en cache
+- No requiere modificacion de la logica de la aplicacion (compatible con las API de DynamoDB existentes)
+- TTL de 5 minutos (configurable)
+- ![[Pasted image 20260408184348.png]]
+
+**DAX vs ElastiCache**
+- DAX 
+	- es un servicio de cache de lectura disenado exclusivamente para DynamoDB
+	- puede usarse cuando nuestra app realiza multiples consultas de lectura a la base y se produce un cuello de botella
+	- puede usarse cuando nuestras consultas a la base son altamente predictibles y se realizan con frecuencia
+	- Puede usarse para alto rendimiento de lectura
+- ElastiCache
+	- es un servicio de memoria cache distribuido adaptable a diversas bases de datos incluyendo DynamoDB
+	- puede usarse cuando se requiera una cache de lectura/escritura
+	- puede usarse cuando nuestra app requiere flexibilidad de cara a la configuracion de clusters
+
+**Procesamiento de flujos**
+- Flujo ordenado de modificaciones a nivel de articulo (crear/modificar/borrar) en una tabla
+- Casos practicos:
+	- Reaccionar a los cambios en tiempo real
+	- Analisis de uso en tiempo real
+	- Implementar la replicacion entre regiones
+	- Invocar AWS Lambda en los cambios de la tabla de DynamoDB
+- **DynamoDB Streams**
+	- Retencion de 24 hs
+	- Numero limitado de consumidores
+	- Procesamiento mediante activadores de AWS Lambda o el adaptador de Kinesis de DynamoDB Stream
+- **Kinesis Data Streams**
+	- Retencion de 1 year
+	- Alto numero de consumidores
+	- Proceso con AWS lambda, kinesis data analytics, data firehose, aws glue streaming etl
+- ![[Pasted image 20260408185545.png]]
+
+**Tablas globales**
+Una tabla global es una tabla donde tenemos multiples tablas distribuidas a lo largo de diversas regiones cuya replicacion se produce en ambas direcciones, siendo que es posible que datos que se guardan en una region tambien se guarden en la otra.
+- Hacer accesible una tabla de DynamoDB con baja latencia en varias regiones.
+- Replicacion activa-activa
+- Las aplicaciones pueden leer y escribir en cualquier tabla de cualquier region.
+- Se debe habilitar DynamoDB streams como requisito previo
+
+**TTL**
+- Borrar automaticamente los elementos despues de una fecha de caducidad
+- Casos practicos: reducir los datos almacenados conservando solo los elementos actuales, cumplir las obligaciones normativas, gestion de sesiones web...
+
+**Copias de seguridad para recuperacion de desastres**
+- Copias de seguridad continuas mediante recuperacion puntual (PITR)
+	- Activacion opcional para los ultimos 35 dias
+	- Recuperacion puntual en cualquier momento dentro de la ventana de copia de seguridad
+	- El proceso de recuperacion crea una nueva tabla
+- Copias de seguridad bajo demanda
+	- Copias de seguridad completas para su conservacion a largo plazo, hasta su eliminacion explicita
+	- No afecta al rendimiento ni a la latencia
+	- Se puede configurar y administrar en AWS Backup (permite la copia entre regiones)
+	- El proceso de recuperacion crea una nueva tabla
+
+**Integracion con Amazon S3**
+- Exportacion a S3 (se debe habilitar Point in time recovery)
+	- Funciona para cualquier momento de los ultimos 35 dias
+	- No afecta a la capacidad de lectura de tu tabla
+	- Conserva snapshots para auditorias
+	- ETL sobre los datos de S# antes de volver a importarlos a DynamoDB
+	- Exportacion en formato DynamoDB JSON o ION
+- Importacion a S3
+	- Importacion en formato CSV, DynamoDB JSON o ION
+	- No consume capacidad de escritura
+	- Crea una nueva tabla
+	- Los errores de importacion se registran en CloudWatch Logs.
+
+## API Gateway
+API Gateway es un servicio totalmente gestionado por AWS que permite crear, publicar, mantener, monitorear y securizar APIs.
+- Compatibilidad con protocolo Websockets
+- Gestion de versiones
+- Gestion de entornos
+- Gestion de seguridad
+- Creacion de claves API, gestion de limitacion de solicitudes (rate limiting)
+- Importacion de Swagger / Open API
+- Transformacion y validacion de solicitudes y respuestas
+- Generacion de SDK y especificaciones de API
+- Almacenamiento en cache de respuestas de API
+
+**Integraciones de alto nivel**
+- **Funcion Lambda**
+	- Invocacion de funcion lambda
+	- Manera sencilla de exponer API REST respaldada por AWS Lambda
+- **HTTP**
+	- Exponer puntos de enlace HTTP en el backend
+	- Agregar limitacion de velocidad, almacenamiento en cache, autenticaciones de usuario, claves API
+- **Servicio AWS**
+	- Exponer cualquier API AWS a traves de API Gateway
+	- Ejemplo: iniciar un flujo de trabajo de AWS step function, enviar un mensaje a SQS
+	- Agregar autenticacion, desplegar automaticamente, control de rate
+
+**Tipos de endpoints**
+- **Edge-optimized (por defecto)**: para clientes globales
+	- Las solicitudes se enrutan a traves de las ubicaciones de cloudfront edge (para mejorar la latencia)
+	- API Gateway sigue viviendo en una sola region
+- **Regional**:
+	- Para clientes de la misma region
+	- Podria combinarse manualmente con CloudFront (mas control sobre las estrategias de almacenamiento en cache y la distribucion)
+- **Privada**:
+	- Solo se puede acceder desde tu VPC utilizando un endpoint de VPC de interfaz (elastic network interface)
+	- Utiliza una politica de recursos para definir el acceso
+
+**Seguridad**
+- **Autenticacion de usuarios mediante** 
+	- Roles IAM (util para apps internas)
+	- Cognito (para usuarios externos)
+	- Autorizador personalizado (tu propia logica)
+- **Seguridad HTTPS de nombre de dominio** personalizado a traves de la integracion con AWS Certificate Manager
+	- Si utilizas el punto de enlace Edge-optimized, el certificado debe estar en us-east-1
+	- Si tuilzias el punto de enlace regional, el certificado debe estan en la region de API Gateway
+	- Debes configurar el registro CNAME o A-alias en Route 53 (A-alias apunta un dominio directo a una IP, CNAME apunta un dominio a otro dominio (es como un alias))
