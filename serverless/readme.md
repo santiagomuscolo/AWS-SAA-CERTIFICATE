@@ -292,3 +292,73 @@ API Gateway es un servicio totalmente gestionado por AWS que permite crear, publ
 	- Si utilizas el punto de enlace Edge-optimized, el certificado debe estar en us-east-1
 	- Si tuilzias el punto de enlace regional, el certificado debe estan en la region de API Gateway
 	- Debes configurar el registro CNAME o A-alias en Route 53 (A-alias apunta un dominio directo a una IP, CNAME apunta un dominio a otro dominio (es como un alias))
+
+	## Step Functions
+- Construye un flujo de trabajo visual serverless para orquestar tus funciones lambda
+- caracteristicas:
+	- secuencial
+	- paralelo
+	- condiciones
+	- tiempos de espera
+	- manejo de errores
+- Integracion con EC2, ECS, servidores locales, API Gateway, colas SQS, etc...
+- Posibilidad de implementar la funcion de aprobacion humana
+- Casos de uso: cumplimiento de pedidos, procesamiento de datos, aplicaciones web, cualquier flujo de trabajo.
+
+## Quiz
+Question 1:
+Has creado una función Lambda que suele tardar alrededor de 1 hora en procesar algunos datos. El código funciona bien cuando lo ejecutas localmente en tu máquina, pero cuando invocas la función Lambda falla con un error de "**tiempo de espera (timeout)**" después de 3 segundos. ¿Qué debes hacer?
+- Lambda por defecto acepta 15 minutos, ante esto conviene ejecutar el codigo en otro lado por ejemplo una instancia
+
+Question 2:
+Antes de crear una tabla de DynamoDB, tienes que aprovisionar la instancia de EC2 en la que se ejecutará la tabla de DynamoDB.
+- Esto es falso dynamo no tiene servidores que aprovisionar
+
+Question 3:
+Has aprovisionado una tabla DynamoDB con 10 RCUs y 10 WCUs. Un mes después quieres aumentar la RCU para manejar más tráfico de lectura. ¿Qué debes hacer?
+- Se aumenta la RCU y la WCU queda igual
+
+Question 4:
+Tienes un sitio web de comercio electrónico en el que utilizas DynamoDB como base de datos. Estás a punto de entrar en las rebajas de Navidad y tienes unos cuantos artículos que son muy populares y esperas que se lean con frecuencia. Por desgracia, el año pasado, debido al enorme tráfico, tuviste la excepción `ProvisionedThroughputExceededException`. ¿Qué harías para evitar que este error se repita?
+- Crear un cluster DAX para cachear las lecturas
+
+Question 5:
+Has desarrollado una aplicación móvil que utiliza DynamoDB como almacén de datos. Quieres automatizar el envío de correos electrónicos de bienvenida a los nuevos usuarios después de que se registren. ¿Cuál es la forma más eficiente de conseguirlo?
+- Habilitando DynamoDB streams y configurandolo para invocar una funcion lambda para enviar los correos electronicos
+
+Question 6:
+Para crear una API sin servidor, debes integrar Amazon API Gateway con ......................
+- Lambda
+
+Question 7:
+Cuando utilizas una API Gateway optimizada para el borde, tu API Gateway vive en las Edge Locations de CloudFront en todas las regiones de AWS.
+- Falso, el API gateway sigue viviendo en una sola region
+
+Question 8:
+Estás ejecutando una aplicación en producción que está aprovechando DynamoDB como su almacén de datos y está experimentando un uso sostenido sin problemas. Es necesario hacer que la aplicación se ejecute también en modo de desarrollo, donde experimentará un volumen imprevisible de solicitudes. ¿Cuál es la solución más rentable que recomiendas?
+- produccion seguira usando el modo aprovisionado con el escalado automatico y desarrollo usara bajo demanda
+
+Question 9:
+Tienes una aplicación que se sirve globalmente utilizando la distribución de CloudFront. Quieres autenticar a los usuarios en las Edge Locations de CloudFront en lugar de que las solicitudes de autenticación vayan hasta sus orígenes. ¿Qué deberías utilizar para satisfacer este requisito?
+- Lambda@Edge
+
+Question 10:
+El tamaño máximo de un elemento en una tabla de DynamoDB es ...................
+- 400 kb
+
+Question 11:
+¿Qué servicio de AWS te permite construir flujos de trabajo sin servidor utilizando servicios de AWS (por ejemplo, Lambda) y soporta la aprobación humana?
+- STEP functions
+
+Question 12:
+Una empresa tiene una aplicación sin servidor en AWS que consiste en Lambda, DynamoDB y Step Functions. En el último mes, hay un aumento en el número de solicitudes contra la aplicación, lo que resulta en un aumento de los costes de DynamoDB, y las solicitudes comenzaron a ser estranguladas. Tras una investigación más profunda, se muestra que la mayoría de las solicitudes son de lectura contra algunas consultas en la tabla de DynamoDB. ¿Qué recomiendas para evitar los estrangulamientos y reducir los costes de forma eficaz?
+- Utilizar el acelerador de DynamoDB DAX para almacenar en cache los datos de lectura mas solicitados
+
+Question 13:
+Eres un ingeniero de DevOps en una empresa de fútbol que tiene un sitio web respaldado por una tabla DynamoDB. La tabla almacena los comentarios de los espectadores de los partidos de fútbol. Te han encargado que trabajes con el equipo de análisis para generar informes sobre las opiniones de los espectadores. El equipo de análisis quiere los datos en DynamoDB en formato `json` y alojados en un bucket de S3 para empezar a trabajar con ellos y crear los informes. ¿Cuál es la forma mejor y más rentable de convertir los datos de DynamoDB en archivos `json`?
+- Selecciona una tabla de DynamoDB y luego selecciona exportar a S3
+
+Question 14:
+Un sitio web está actualmente en proceso de desarrollo y se va a alojar en AWS. Es necesario almacenar las sesiones de usuario de los usuarios que han iniciado sesión en el sitio web con una caducidad y eliminación automática de las sesiones de usuario caducadas. ¿Cuál de los siguientes servicios de AWS es el más adecuado para este caso de uso?
+- Se utiliza Dynamo y se habilita el TTL
+
