@@ -134,3 +134,71 @@ Una consulta federada hace referencia a que AWS Athena hace una sola consulta y 
 - Glue databrew: limpia y normaliza los datos medainte transformaciones predefinidas
 - Glue studio: nueva interfaz grafica de usuario para crear, ejecutar y supervisar trabajos ETL en GLue
 - Glue streaming ETL: (basado en apache spark structured streaming) compatible con kinesis data streaming, kafka, MSK (managed kafka)
+
+## AWS Lake Formation
+- Lake formation / lago de datos = lugar central para guardar todos los datos con finalidad analitica.
+- Servicio totalmente gestionado que facilita la configuracion en cuestion de dias
+- Descubre, limpia, transforme e ingiere datos en el lago de datos
+- Automatiza muchos pasos manuales complejos como lo son recopilar, limpiar, mover, catalogar datos y de-duplicar (ml transforms)
+- Combina datos estructurados y no estructurados en el lago de datos
+- Planos de origen listos para usar: S3, RDS, BD relacionales y no relacionales
+- Control de acceso detallado para las aplicaciones (a nivel de fila y columna)
+- ![[Pasted image 20260420082530.png]]
+- Para la centralizacion de los permisos en arquitecturas con lake formation se setean a nivel de columna en el mismo, de esta forma es mas facil su gestion.
+
+## Kinesis data analytics
+![[Pasted image 20260420083018.png]]
+- Analisis en tiempo real en Kinesis data streams y firehose
+- Agregar datos de referencia en Amazon S3 para enriquecer los datos de streaming
+- Totalmente administrado, sin servidores que aprovisionar
+- Escalado automatico
+- Pague por la tasa de consumo real
+- Salida:
+	- Kinesis data streams: para crear flujos a partir de las consultas en tiempo real
+	- Kinesis data firehose: envio de resultados de consultas analiticas a destinos
+- Casos de uso:
+	- Analisis de series temporales
+	- Dashboards en tiempo real
+
+**Integracion con Apache Flink**
+- Utilizacion de Flink (Java, Scala o SQL) para procesar y analizar datos en streaming
+- Ejecuta cualquier aplicacion Apache Flink en un cluster administrado en AWS 
+	- Aprovisionamiento de recursos informaticos, computacion paralela, escalado automatico
+	- Backups de aplicaciones (implementados como puntos de control e instantaneas)
+	- Utiliza cualquier caracteristica de programacion de Apache Flink
+
+## Amazon streaming gestionado por Apache Kafka
+- Alternativa a kinesis data streams
+- Totalmente administrado por AWS
+	- Permite crear, actualizar y eliminar clusteres
+	- MSK crea y administra nodos brokers de kafka y nodos zookeper por ti
+	- Implementa el cluster MSK en tu VPC, multi-AZ (hasta 3 para alta disponibilidad)
+	- Recuperacion automatica de fallos comunes de Apache Kafka
+	- Los datos se almacenan en volumenes EBS durante todo el tiempo que desees
+- MSK sin servidor
+	- Ejecuta apache kafka en MSK sin gestionar la capacidad
+	- MSK aprovisiona automaticamente los recursos y escala la computacion y el almacenamiento
+- ![[Pasted image 20260420084517.png]]
+
+**Data streams vs MSK**
+- Kinesis data streams
+	- Limite de size de los mensajes: 1 MB
+	- flujos de datos con shards
+	- Division y fusion de fragmentos
+	- Cifrado TLS en vuelo
+	- Cifrado KMS en reposo
+- MSK
+	- 1 MB por defecto, pero es configurable (10 MB)
+	- Temas Kafka con particiones
+	- Solo se pueden agregar particiones a un tema
+	- Cifrado en vuelo PLAINTEXT o TLS
+	  Cifrado KMS en reposo
+
+## Pipeline de ingestion de big data
+- Queremos que el proceso de ingesta sea totalmente serverless
+- Se quieren recopilar los datos en tiempo real
+- Se quiere poder transformarlos
+- Quiere poder consultarse los datos transformados con SQL
+- Los informes creados utilizando las consultas deben estar en S3
+- Queremos cargar esos datos en un almacen y crear dashboards
+- ![[Pasted image 20260420092339.png]]
