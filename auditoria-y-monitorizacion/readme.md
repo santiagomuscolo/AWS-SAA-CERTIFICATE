@@ -69,3 +69,51 @@ Kinesis data streams nos ofrece la posibilidad de centralizar los streams de dat
 - Netstat (numero de conexiones TCP y UDP, paquetes netos, bytes)
 - Procesos (totales, muertos, bloqueados, inactivos, en ejecucion, en reposo)
 - Espacios de intercambio (gratis, usado, % usado)
+
+## CloudWatch Alarms
+- Las alarmas se utilizan para activar notificaciones para cualquier metrica
+- Varias opciones (muestreo, %, max, min, etc...)
+- Estados de alarma:
+	- OK
+	- DATOS_INSUFICIENTES
+	- ALARMA
+- Periodo:
+	- Tiempo en segundos para evaluar la metrica
+	- Metricas personalizadas de alta resolucion: 10 segundos, 30 seg o multiplos de 60 seg
+
+**Objetivos**
+Detener, Terminar, Reiniciar o Recuperar una instancia EC2
+Activar la accion de autoescalado
+Enviar una notificacion SNS (desde donde puedes hacer practicamente cualquier cosa)
+
+**Alarmas compuestas**
+- Las alarmas CloudWatch son sobre una metrica unica
+- Las alarmas compuestas supervisan los estados de otras alarmas multiples
+- Condiciones AND y OR
+- Utiles para reducir el "ruido de alarma" creando alarmas compuestas complejas
+
+**Recuperacion de instancias**
+- Comprobacion de estado
+	- Estado de la instancia = comprueba la maquina virtual de EC2
+	- Estado del sistema = comprueba el hardware subyacente
+- Recuperacion bajo la misma IP privada, publica, elastica, metadatos, grupo de colocacion
+
+## EventBridge
+ - Programar: scripts programados (cron jobs)
+ - Patron de eventos: reglas de eventos para reaccionar ante un servicio que hace algo
+ - Activa funciones lambda, envia mensajes sqs/sns
+ - ![[Pasted image 20260424114033.png]]
+ - ![[Pasted image 20260424114233.png]]
+- Otras cuentas de AWS pueden acceder a los buses de eventos mediante politicas basadas en recursos
+- Puedes archivar eventos (todos/filtro) enviados a un bus de eventos (indefinidamente o por un periodo determinado)
+
+**Registro de esquemas**
+- EventBridge puede analizar los evntos de tu bus e inferir el esquema
+- El registro de esquemas te permite generar codigo para tu aplicacion, que sabra de antemano como se estructuran los datos en el bus de eventos
+- El esquema puede versionarse
+- ![[Pasted image 20260424114704.png]]
+
+**Politica basada en recursos**
+- Gestionar permisos para un bus de eventos especifico
+- Ejemplo: permitir/denegar eventos de otra cuenta AWS o region AWS
+- Caso practico: agregar todos los eventos de tu Organizacion AWS en una unica cuenta AWS o region AWS
