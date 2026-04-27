@@ -117,3 +117,74 @@ Enviar una notificacion SNS (desde donde puedes hacer practicamente cualquier co
 - Gestionar permisos para un bus de eventos especifico
 - Ejemplo: permitir/denegar eventos de otra cuenta AWS o region AWS
 - Caso practico: agregar todos los eventos de tu Organizacion AWS en una unica cuenta AWS o region AWS
+
+## Cloudwatch insights y visibilidad operativa
+
+**Container insights**
+- Recoge, agrega y resume las metricas y logs de los contenedores
+- disponible en 
+	- ECS
+	- EKS
+	- Plataformas Kubernetes en EC2
+	- Fargate (tanto para ECS como para EKS)
+- En Amazon EKS y Kubernetes, CloudWatch Insights utiliza una version en contendores del Agente CloudWatch para descubrir contenedores
+
+**Lambda Insights**
+- Recopila, agrega y resume metricas a nivel de sistema, incluyendo tiempo de CPU, memoria, disco y red
+- Recopila, agrega y resume informacion de diagnostico, como arranques en frio y cierres de trabajadores lambda.
+- Lambda insights se proporciona como una capa de Lambda.
+
+**Cloudwatch contributors insights**
+- Analiza los logs y crea series temporales que muestren los datos de los colaboradores
+	- Ver metricas de los N colaboradores principales.
+	- El numero total de colaboradores unicos y su uso.
+- Esto te ayuda a encontrar a los que mas hablan, y a comprender quien o que esta afectando al rendimiento del sistema
+- Funciona para cualquier logs generado por AWS (VPC, DNS, etc...)
+- Por ejemplo, puedes encontrar hosts defectuosos, identificar a los usuarios de red mas pesados o encontrar las URL que generan mas errores
+- Puedes crear tus reglas desde 0, o tambien pueden utilizarse las reglas que AWS disponibiliza
+
+**Cloudwatch application insights**
+Proporciona dashboards automatizados creados por SageMaker para mostrar problemas potenciales de aplicaciones monitorizadas, permitiendo aislar problemas en curso.
+- Aplicaciones que se ejecutan en EC2 solo con determinadas tecnologias (Java, .NET, Microsoft IIS Web Server, bases de datos...)
+- Y puedes utilizar otros recursos de AWS como: EBS, RDS, ELB, ASG, Lambda, SQS, DynamoDB, S3 bucket, ECS, EKS, SNS, API Gateway
+- Las conclusiones y alertas se pueden enviar a EventBridge mediante notificaciones de eventos al eventbus y a SSM OpsCenter
+
+## Cloudtrail
+Es un servicio para gobernanza, normativa y auditoria, cloudtrail ofrece logs de todos los llamados a la API de AWS, permitiendo guardar los mismos en CloudWatch logs o S3, aplicable de forma multi regional o solo regional.
+
+**Eventos de gestion**
+Los eventos de gestion estan activados por defecto y hacen referencia a las operaciones que se realizan en los recursos de tu cuenta de AWS, como por ejemplo:
+- Configurar la seguridad
+- Configurar reglas para enrutar datos
+- Configurar logs
+Los eventos de gestion son divisibles por eventos de lectura (aquellos que no modifican recursos) y eventos de escritura (aquellos que si los modifican.
+
+**Eventos de datos**
+Estan desactivados por defecto y son divisibles por lectura y escritura, como son eventos masivos como por ejemplo api invokes o lecturas de objetos estos no son visibles por defecto.
+
+**Insights events**
+Insights usa los eventos de gestion como base para detectar anomalias en nuestros recursos de AWS, verificando los eventos de escritura y sus patrones.
+![[Pasted image 20260427200149.png]]
+
+**Retencion**
+Cloudtrail almacena logs durante un periodo de 90 dias, luego para su respectivo almacenamiento y analisis deberian pasarse a un bucket S3 y ser analizados por athena
+
+**Aclaracion**
+En administracion los eventos de lectura hacen referencia a la consulta de configuracion/inventario de la cuenta no al recurso individual ya que eso pertenece al evento de datos.
+En otras palabras, en management events se pena la configuracion del recurso en si y en data events se panea todo lo que esta dentro de ese recurso a nivel individual
+
+## AWS Config 
+Es un servicio que nos sirve para auditar y registrar la normativa de nuestros servicios de AWS, ayudando a registrar cambios y configuraciones a lo largo del tiempo, es un servicio por region que nos provee notificaciones sns para alertas y almacenamiento de datos en S3.
+
+**reglas de configuracion**
+AWS disponibiliza +75 reglas de configuracion, sin embargo, podemos tener reglas custom y pueden activarse o desactivarse, se cobra 0,003$ por elemento configurado por region mas 0,001% por evaluacion de regla de configuracion por region.
+![[Pasted image 20260427203802.png]]
+
+**Autoremediacion**
+AWS config nos permite ver si los servicios estan "conformes" o "no conformes", mediante esta evaluacion podemos activar acciones de autorremediacion para corregir dicho estado con un maximo de 5 reintentos.
+![[Pasted image 20260427204039.png]]
+
+**Notificaciones**
+Config puede enviar notificaciones a eventBridge y que eventBridge distribuya el evento a otros servicios de AWS, permitiendonos notificar frente a servicios no "conformes" y/o cambios en las configuraciones
+![[Pasted image 20260427204259.png]]
+![[Pasted image 20260427204303.png]]
