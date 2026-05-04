@@ -62,3 +62,48 @@ Puede utilizarse en cualquier politica de recursos para restringir el acceso a c
 - Delegar responsabilidades a no administradores dentro de sus limites de permisos, por ejemplo crear nuevos usuarios IAM
 - Permitir que los desarrolladores se autoasignen politicas y gestionen sus propios permisos sin permitir que se vuelvan admins
 - Util para restringir a un usuario concreto (en lugar de a toda unac uenta mediante organizaciones y SCP)
+
+## Cognito
+Servicio de autenticacion y autorizacion para apps web y mobiles
+
+**Grupos de usuarios cognito**
+- Funcionalidad de inicio de sesion para usuarios de aplicaciones
+- Integracion con API Gateway y Application Load Balancer
+
+**Cognito identity pools (identidad federada)**
+- Proporciona credenciales AWS a los usuarios para que puedan acceder directamente a los recursos de AWS
+- Integrar con Cognito User Pools como proveedor de identidades
+
+**User pools**
+Crea una base de datos para usuarios serverless ofreciendo un inicio de sesion simple con posibilidad de recuperacion de contrasena, multi factor e integraciones de identidades federadas
+
+Integraciones
+- Api gateway (serverless)
+- Application load balancer
+- ![[Pasted image 20260504202046.png]]
+
+**Cognito identity pools**
+Permite obtener identidades para "usuarios" para que obtengan credenciales temporales en AWS, el origen de los mismos puede variar (Cognito User Pools, inicios de sesion de terceros, etc...).
+Trae Roles IAM por defecto y permite que los usuarios puedan acceder a servicios de AWS directamente o a traves de API gateway
+![[Pasted image 20260504202436.png]]
+
+## Centro de identidades de AWS IAM
+Este servicio es el sucesor de AWS single sign on y busca centralizar el login para todas tus cuentas de forma unica
+- AWS Organizations
+- Aplicaciones empresariales en el cloud (Salesforce, microsoft)
+- Aplicaciones habilitadas para SAML 2.0
+- Instancias de windows EC2
+![[Pasted image 20260504203141.png]]
+
+**Permisos y asignaciones en detalle**
+- Permisos multicuenta
+	- Gestiona el acceso a traves de las cuentas de AWS en tu organizacion AWS
+	- Conjuntos de permisos - una coleccion de una o mas politicas IAM asignadas a usuarios y grupos apra definir el acceso a AWS
+- Asginaciones de aplicaciones
+	- Acceso SSO a muchas aplicaciones empresariales
+	- Proporciona las URL, certificados y metadatos necesarios
+- Control de acceso basado en atributos (ABAC)
+	- Permisos detallados basados en los atributos de los usuarios almacenados en el almacen de identidades del centro de identidades IAM
+	- Ejemplo: centro de costes, cargo, config regional
+	- Caso practico: define los permisos una vez y luego modificar el acceso AWS cambiando los atributos
+	- ![[Pasted image 20260504203920.png]]
