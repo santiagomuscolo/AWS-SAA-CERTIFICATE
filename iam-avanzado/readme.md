@@ -107,3 +107,91 @@ Este servicio es el sucesor de AWS single sign on y busca centralizar el login p
 	- Ejemplo: centro de costes, cargo, config regional
 	- Caso practico: define los permisos una vez y luego modificar el acceso AWS cambiando los atributos
 	- ![[Pasted image 20260504203920.png]]
+
+	## AWS Directory Service
+
+**Que es Microsoft Active Directory (AD)**
+Es una base de datos de objetos que puede contener sesiones de usuarios, maquinas, archivos compartidos, grupos de seguridad, etc... y se encuentra en cualquier servidor de Windows con Servicios de dominio AD.
+Dentro del mismo los objetos se organizan en arboles, un grupo de los mismos puede considerarse un "bosque" y ofrece una gestion centralizada de la seguridad.
+
+**Servicios de directorio de AWS**
+- Microsoft AD administrado por AWS
+	- Crea tu propio AD en AWS, administra usuarios localmente y soporta MFA
+	- Establece conexiones de confianza con tu AD local
+- Conector AD
+	- Directory Gateway (proxy) para redirigir al AD local, soporta MFA
+	- Los usuarios se gestionan en el AD local
+- AD simple
+	- Directorio gestionado compatible con AD en AWS
+	- No se puede unir con AD local
+
+## AWS Control Tower
+Es un servicio que permite configurar y gobernar un entorno de AWS multicuenta seguro y conforme a las mejores practicas utilizando AWS Organizations.
+
+**Guardtrails**
+- Proporciona gobernanza continua para tu entorno de AWS Control Tower 
+- **Guardtrail preventivo - utilizano SCP**: sirve para por ejemplo restringir regiones en todas tus cuentas
+- **Guardtrail detectivo - Utilizando AWS Config**: Sirve para por ejemplo la deteccion de recursos no etiquetados
+- ![[Pasted image 20260506171851.png]]
+
+## Quiz
+Question 1:
+
+Tienes una aplicación móvil y te gustaría dar a tus usuarios acceso a su propio espacio personal en el bucket de S3. ¿Cómo lo consigues?
+- Utilizando AWS Cognito Identity Federation
+
+Question 2:
+
+Tienes fuertes requisitos normativos para permitir sólo servicios de AWS totalmente auditados internamente en producción. Sin embargo, quieres permitir que tus equipos experimenten en un entorno de desarrollo mientras se auditan los servicios. ¿Cuál es la mejor manera de configurar esto?
+- Crea una organizacion AWS y crea dos OUs Prod y Dev, luego aplica un SCP en la OU Prod
+
+Question 3:
+
+Gestionas la cuenta de AWS de tu empresa y quieres dar a uno de los desarrolladores acceso para leer archivos de un bucket de S3. Has actualizado la política del bucket, pero sigue sin poder acceder a los archivos del bucket. ¿Cuál es el problema?
+
+`{`
+
+   `"Version": "2012-10-17",`
+
+   `"Statement": [{`
+
+      `"Sid": "AllowsRead",`
+
+      `"Effect": "Allow",`
+
+      `"Principal": {`
+
+         `"AWS": "arn:aws:iam::123456789012:user/Dave"`
+
+       `},`
+
+      `"Action": "s3:GetObject",`
+
+     `"Resource": "arn:aws:s3:::static-files-bucket-xxx"`
+
+  `}]`
+
+`}`
+
+- El rource debe tener /* ya que se trata de un permiso a nivel objeto
+
+
+Question 4:
+
+Tienes 5 cuentas de AWS que gestionas mediante AWS Organizations. Quieres restringir el acceso a determinados servicios de AWS en cada cuenta. ¿Cómo deberías hacerlo?
+- Utilizando AWS SCP a nivel Organizations
+
+Question 5:
+
+¿Cuál de las siguientes claves de condición de IAM puedes utilizar sólo para permitir las llamadas a la API desde una región de AWS especificada?
+- aws:RequestedRegion
+
+Question 6:
+
+Cuando configures los permisos para que EventBridge configure una función Lambda como objetivo debes utilizar ....................... pero cuando quieras configurar un Kinesis Data Streams como objetivo debes utilizar .......................
+- Politica basada en recursos, politica basada en identidad
+
+Question 7:
+
+Estás desarrollando una nueva aplicación web y móvil que se alojará en AWS y, actualmente, estás trabajando en el desarrollo de la página de inicio de sesión y registro. El backend de la aplicación es sin servidor y estás utilizando Lambda, DynamoDB y API Gateway. ¿Cuál de los siguientes enfoques es el mejor y más fácil para configurar la autenticación para tu backend?
+- Utilizando los pools de usuarios de cognito
