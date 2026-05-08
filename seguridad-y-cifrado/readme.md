@@ -52,3 +52,14 @@ El proceso seria algo asi:
 - Usuario comparte la snapshot cifrada
 - Usuario destino descifra el snapshot compartido, lo copia y lo cifra con su propia clave KMS
 - Usuario destino crea su propio volumen EBS a partir de la copia cifrada que creo.
+
+## Claves multi region KMS
+Las claves multiregion son claves KMS identicas en diferentes regiones de AWS que pueden utilizarse indistintamente, estas poseen el mismo ID de clave, rotacion automatica, etc...
+Las mismas no son globales - Primario + replicas y cada una se gestiona de forma independiente.
+**Caso de uso**: Cifrado global del lado del cliente, cifrado en DynamoDB Global, Aurora Global.
+
+**Caso de uso - cifrado de tablas globales de dynamoDB con claves multiregion KMS**
+![[Pasted image 20260508191113.png]]
+
+**Caso de uso - Cifrado del lado del cliente de las claves globales Aurora y KMS multiregion**
+![[Pasted image 20260508191400.png]]
