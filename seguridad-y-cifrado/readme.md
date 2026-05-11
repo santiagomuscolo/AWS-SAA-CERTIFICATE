@@ -63,3 +63,31 @@ Las mismas no son globales - Primario + replicas y cada una se gestiona de forma
 
 **Caso de uso - Cifrado del lado del cliente de las claves globales Aurora y KMS multiregion**
 ![[Pasted image 20260508191400.png]]
+
+## Replicacion S3 con encriptacion
+En S3 poseemos 3 tipos de cifrado SSE-S3, SSE-C y SSE-KMS, estos presentan diveresas caracteristicas de cara al cifrado frente a la replicacion.
+- SSE-S3 replica objetos cifrados y no cifrados por defecto.
+- SSE-C no replica objetos cifrados
+- SSE-KMS presenta la opcion de replicacion de objetos cifrados 
+	- Se debe aclarar que clave KMS se utilizara para cifrar los objetos dentro del bucket de destino
+	- Adaptar la politica de claves KMS para la clave de destino
+	- Un rol IAM kms:Encrypt para la clave KMS de origen y kms:Decrypt para la clave KMS de destino.
+- Las claves multiregion son utilizables pero S3 las trata como claves independientes.
+
+## Proceso de comparticion de AMI encriptada
+Las AMIs de origen suelen estar encriptadas en la cuenta del usuario gestionadas mediante claves KMS, sin embargo, estas pueden compartirse por medio de lo que se llama "permiso de lanzamiento" este es configurado para agregar el id de la cuenta destino a la que se compartira dicha AMI encriptada por lo que la cuenta destino requerira de algunos roles IAM como lo son DescribeKey, ReEncrypted, CreateGrant... como bien fue nombrado con anterioridad la AMI es cifrada con una clave KMS por lo que al compartir dicha ami tambien en paralelo debemos compartir la clave misma (mediante politica de clave) para que la cuenta destino pueda trabajar sobre la misma y asi lanzar su instancia EC2 en su propia cuenta para cifrar sus volumenes.
+![[Pasted image 20260511110145.png]]
+## SSM Parameter Store
+Es un servicio para el almacenamiento seguro de la configuracion y los secretos que ofrece un cifrado sin fisuras mediante la utilizacion de SSM y la comprobacion de identidad con IAM.
+![[Pasted image 20260511110535.png]]
+
+**Jerarquia del almacen**
+Es un servicio cuyo registro de secretos es manejado por directorios y subdirectorios accesibles mediante SDK, o Lambda (llamando a la API)
+
+**precios**
+![[Pasted image 20260511110916.png]]
+
+**Politicas de parametros**
+- TTL a parametros para forzar su actualizacion o eliminacion 
+- Asignacion de politicas en simultaneo
+- ![[Pasted image 20260511111140.png]]
