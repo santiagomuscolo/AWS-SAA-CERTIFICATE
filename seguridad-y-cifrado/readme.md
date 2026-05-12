@@ -91,3 +91,12 @@ Es un servicio cuyo registro de secretos es manejado por directorios y subdirect
 - TTL a parametros para forzar su actualizacion o eliminacion 
 - Asignacion de politicas en simultaneo
 - ![[Pasted image 20260511111140.png]]
+
+## AWS Secrets Manager
+Es un servicio que esta destinado a guardar unicamente secretos con el beneficio de que estos tienen la capacidad de forzar su rotacion cada x dias.
+- Permite rotar secretos automaticamente mdiante lambda
+- posee integracion con RDS
+- Los secretos son cifrables mediante KMS
+
+**soporte multiregion**
+Los secretos son replicables entre regiones permitiendo el uso multi-region de los secrets, esto sirve para recuperacion de desastres, bases de datos multi region, etc...
