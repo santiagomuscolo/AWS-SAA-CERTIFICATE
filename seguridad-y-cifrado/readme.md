@@ -100,3 +100,22 @@ Es un servicio que esta destinado a guardar unicamente secretos con el beneficio
 
 **soporte multiregion**
 Los secretos son replicables entre regiones permitiendo el uso multi-region de los secrets, esto sirve para recuperacion de desastres, bases de datos multi region, etc...
+
+## AWS certificate manager
+Certificate manager es un servicio que permite aprovisionar, gestionar y desplegar facilmente certificados TLS/SSL, el mismo maneja soporte para certificados TLS publicos y gratuitos, renovacion de los mismos de forma automatica (solo si son creados en ACM si son importados no) y soporte con: ELB, API gateway, Distribuciones de cloudfront, EC2 no es compatible...
+
+## WAF
+WAF es un servicio de firewall para proteger a las aplicaciones de los diversos exploits de capa 7 que existen, el mismo puede desplegarse en: ALB, Gateway API, Cloudfront, API GraphQL de AppSync y Grupo de usuarios cognito.
+
+**reglas**
+WAF nos permite definir una serie de reglas para la proteccion de nuestra web denominadas reglas ACL (access control list):
+- Conjunto de IP hasta 10.000 direcciones IP
+- Bloqueo por geo-match
+- Cabeceras HTTP, body HTTP, String URI para proteger de inyecciones sql y XSS
+- Reglas basadas en tasa para evitar DDoS
+
+Estas reglas son regionales exceptuando Cloudfront donde se aplican a nivel global. Ademas son definibles por grupos para poder re-utilizarlas.
+
+**problematica: IP fija al usar WAF con un ALB**
+Aca la problematica nace en que un ALB no puede usar una IP fija por defecto, siendo el caso AWS nos ofrece AWS global accelerator para obtenerla.
+![[Pasted image 20260515111252.png]]
