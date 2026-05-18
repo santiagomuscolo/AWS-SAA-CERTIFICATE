@@ -119,3 +119,28 @@ Estas reglas son regionales exceptuando Cloudfront donde se aplican a nivel glob
 **problematica: IP fija al usar WAF con un ALB**
 Aca la problematica nace en que un ALB no puede usar una IP fija por defecto, siendo el caso AWS nos ofrece AWS global accelerator para obtenerla.
 ![[Pasted image 20260515111252.png]]
+
+## AWS shield - proteccion contra ataques DDoS
+
+**Que es DDoS?**
+Distributed denegation of services es un ataque cibernetico destinado a evitar servir nuestra servicio mediante la ejecucion de multiples peticiones desde multiples maquinas diferentes.
+
+**Planes**
+- AWS Shield Estandar: 
+	- gratuito 
+	- Proporciona proteccion contra ataques SYN/UDP Floods, ataques de reflexion y otros ataques de capa de 3/4
+- AWS Shield Avanzado:
+	- Servicio opcional de mitigacion de DDoS (3000 USD mensuales por org)
+	- Protege contra ataques mas sofisticados en EC2, ELB, CloudFront, AWS Global Accelerator y Route 53
+	- Acceso 24/7 al equipo de respuesta de DDoS de AWS 
+	- Crea una mitigacion automatica de DDoS en la capa de aplicacion, evalua y despliega automaticamente reglas WAF para mitigar los ataques de capa 7
+
+## Firewall Manager
+Es un servicio que sirve para gestionar reglas en todas las cuentas de una organizacion de AWS
+
+**Grupos de politicas de seguridad (regionales)**
+- Reglas WAF (ALB, API Gateway, CloudFront)
+- AWS Shield avanzado (ALB, CLB, NLB, Elastic IP, CloudFront)
+- Grupos de seguridad para EC2, ALB y recursos ENI en VPC
+- AWS network firewall (nivel VPC)
+- Resolver firewall DNS de route 53
