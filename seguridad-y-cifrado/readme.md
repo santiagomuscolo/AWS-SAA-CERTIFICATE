@@ -144,3 +144,44 @@ Es un servicio que sirve para gestionar reglas en todas las cuentas de una organ
 - Grupos de seguridad para EC2, ALB y recursos ENI en VPC
 - AWS network firewall (nivel VPC)
 - Resolver firewall DNS de route 53
+
+## Mejores practicas contra DDoS
+![[Pasted image 20260519202734.png]]
+
+- BP1 - cloudfront
+	- Entrega de aplicaciones web en el borde
+	- Protege de los ataques DDoS comunes (inundaciones SYN...)
+- BP1 - global accelerator
+	- Accede a tu aplicacion desde el edge
+	- integracion con shield
+	- Util si tu backend no es compatible con cloudfront
+- BP3 - route 53
+	- Resolucion de nombres de dominio en el borde
+	- Mecanismo de proteccion DDoS
+- Defensa de la capa de infraestructura (BP1, BP3, BP6)
+	- Protege Amazon EC2 contra el trafico elevado
+	- Esto incluye el uso de Global accelerator, route 53, cloudfront, elastic load balancing.
+- Amazon EC2 con autoescalado BP7
+	- Ayuda a escalar en caso de aumentos repentinos de trafico, incluyendo una multitud repentina o ataques DDoS
+- Elastic Load Balancing BP6
+	- Elastic load balancing escala con aumentos de trafico y distribuira el trafico a muchas instancias EC2
+- Detecta y filtra peticiones web maliciosas (BP1, BP2)
+	- Cloudfront cachea el contenido estatico y lo sirve en edge locations
+	- AWS WAF se utiliza sobre cloudfront y ALB para filtrar y bloquear peticiones basadas en firmas de peticiones
+	- Las reglas basadas en la tasa de WAF pueden blouqear automaticamente las IP de los malos actores
+	- Utiliza reglas gestionadas en WAF para bloquear ataques basados en la reputacion de la IP, o bloquear IPs anonimas
+	- CloudFront puede bloquear geografias especificas
+- Shield Avanzado (BP1, BP2, BP6)
+	- La mitigacion automatica de DDoS en la capa de aplicacion de shield advanced crea, evalua y despliega automaticamente reglas WAF de AWS para mitigar ataques de capa 7
+- Ofuscar recursos de AWS BP1, 4 y 6
+	- Uso de cloudfront, APi gateway, elastic load balancing para ocultar tus recursos de backend (funciones lambda, instancias EC2)
+- Grupos de seguridad y ACLs de red BP5
+	- Utiliza grupos de seguridad y NACLs para filtrar el trafico basado en IP especificas a nivel de subred o ENI
+	- Las IP elasticas estan protegidas por shield advanced
+- Proteger los endpoints API BP4
+	- Ocultar EC2, Lambda, en otro lugar
+	- Modo optimizado para edge, o cloudfront + modor egional (mas control sobre DDoS)
+	- WAF + API gateway: limite de rafagas, filtrado de cabeceras, uso de claves API
+
+## GuardDuty
+GuardDuty es un servicio de descubrimiento inteligente de amenazas que utiliza machine learning (deteccion de anomalias y datos de terceros) para proteger la cuenta de AWS.
