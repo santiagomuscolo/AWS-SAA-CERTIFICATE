@@ -185,3 +185,141 @@ Es un servicio que sirve para gestionar reglas en todas las cuentas de una organ
 
 ## GuardDuty
 GuardDuty es un servicio de descubrimiento inteligente de amenazas que utiliza machine learning (deteccion de anomalias y datos de terceros) para proteger la cuenta de AWS.
+
+## Amazon inspector
+Es un servicio que realiza evaluaciones de seguridad automatizadas para:
+- Instancias ec2
+- Imagenes enviadas a ECR (Elastic Container Registry)
+- Funciones Lambda
+
+Posee integracion con AWS security hub y eventBridge.
+Este servicio funciona por una puntuacion a todas las vulnerabilidades encontradas para priorizarlas.
+
+## Macie
+Es un servicio de seguridad y privacidad de los datos totalmente gestionado que utiliza ML y la concordancia de patrones para descubrir y proteger tus datos sensibles en AWS, el mismo ayuda a identificar y alertar sobre datos sensibles, como la informacion personal identificable (PII)
+
+## Quiz
+Question 1:
+
+Para activar el cifrado en vuelo (cifrado en tránsito), necesitamos tener ........................
+- Un endpoint HTTPS con cifrado en vuelo
+
+Question 2:
+
+El cifrado del lado del servidor significa que los datos se envían cifrados al servidor.
+- falso
+
+Question 3:
+
+En el cifrado del lado del servidor, ¿dónde se produce el cifrado y el descifrado?
+- Tanto el cifrado como el descifrado ocurren en el servidor
+
+Question 4:
+
+En el cifrado del lado del cliente, el servidor debe conocer nuestro esquema de cifrado antes de que podamos cargar los datos.
+- falso
+
+Question 5:
+
+Tienes que crear claves KMS en AWS KMS antes de poder utilizar las funciones de cifrado para EBS, S3, RDS...
+- falso
+
+Question 6:
+
+AWS KMS soporta claves KMS tanto simétricas como asimétricas.
+- verdadero
+
+Question 7:
+
+Cuando activas la Rotación Automática en tu Clave KMS, la clave de respaldo se rota cada .................
+- 1 ano
+
+Question 8:
+
+Tienes una AMI que tiene una Snapshot de EBS encriptada mediante KMS CMK. Quieres compartir esta AMI con otra cuenta de AWS. Has compartido la AMI con la cuenta de AWS deseada, pero la otra cuenta de AWS sigue sin poder utilizarla. ¿Cómo resolverías este problema?
+- se tiene que compartir la CMK de KMS utilizada para cifrar la AMI con la otra cuenta de AWS
+
+Question 9:
+
+Has creado una CMK gestionada por el cliente en KMS que utilizas para cifrar tanto los buckets de S3 como las Snapshots de EBS. La política de tu empresa exige que las claves de cifrado se roten cada 3 meses. ¿Qué deberías hacer?
+- Rotar la CMK manualmente. Crea una nueva CMK y utiliza Alias de clave para referenciar la nueva CMK de KMS y conservar la antigua para poder decifrar datos antiguos.
+
+Question 10:
+
+¿Qué deberías utilizar para controlar el acceso a tus CMKs de KMS?
+- politicas de claves
+
+Question 11:
+
+Tienes una función Lambda que se utiliza para procesar algunos datos en la base de datos. Te gustaría dar a tu función Lambda acceso a la contraseña de la base de datos. ¿Cuál de las siguientes opciones es la más segura?
+- Tenerla como una variable de entorno cifrada y descifrar en tiempo de ejecucion
+
+Question 12:
+
+Tienes un valor secreto que utilizas con fines de encriptación, y quieres almacenar y rastrear los valores de este secreto a lo largo del tiempo. ¿Qué servicio de AWS deberías utilizar?
+- Almacen de parametros SSM
+
+Question 13:
+
+Tu sitio web de cara al usuario es un objetivo de alto riesgo para los ataques DDoS y te gustaría obtener soporte 24 horas al día, 7 días a la semana, en caso de que se produzcan y el reembolso de la factura de AWS por los costes incurridos durante el ataque. ¿Qué servicio de AWS deberías utilizar?
+- Tener shield avanzado
+
+Question 14:
+
+Te gustaría mantener externamente los valores de configuración de tu base de datos principal, para que sean recogidos en tiempo de ejecución por tu aplicación. ¿Cuál es el mejor lugar para almacenarlos para mantener el control y el historial de versiones?
+- con un almacen de parametros SSM
+
+Question 15:
+
+AWS GuardDuty analiza las siguientes fuentes de datos, **EXCEPTO** ................
+- Cloudwatch logs
+
+Question 16:
+
+Tienes un sitio web alojado en una flota de instancias de EC2, con un Load Balancer de aplicaciones al frente. ¿Qué deberías utilizar para proteger tu sitio web de los ataques comunes a las aplicaciones web (por ejemplo, la inyección SQL)?
+- WAF
+
+Question 17:
+
+Te gustaría analizar las vulnerabilidades del sistema operativo desde las instancias EC2. Necesitas que estos análisis se produzcan semanalmente y te proporcionen recomendaciones concretas en caso de que se encuentren vulnerabilidades. ¿Qué servicio de AWS deberías utilizar?
+- Inspector
+
+Question 18:
+
+¿Cuál es el servicio de AWS más adecuado para almacenar las contraseñas de las BD de RDS, que además te proporcione una rotación automática?
+- AWS secrets manager
+
+Question 19:
+
+¿Qué servicio de AWS te permite gestionar de forma centralizada los Grupos de Seguridad de EC2 y AWS Shield Advanced en todas las cuentas de AWS de tu AWS Organizations?
+- AWS Firewall Manager
+
+Question 20:
+
+¿Qué servicio de AWS te ayuda a proteger tus datos sensibles almacenados en buckets S3?
+- AWS macie
+
+Question 21:
+
+Una empresa de pagos online utiliza AWS para alojar su infraestructura. El frontend se crea con VueJS y se aloja en un bucket S3 y el backend se desarrolla con PHP y se aloja en instancias EC2 en un Auto Scaling Groups. Como sus clientes están en todo el mundo, utilizan tanto CloudFront como la base de datos Aurora Global para implementar despliegues multirregionales para proporcionar la menor latencia y ofrecer disponibilidad y resiliencia. Se necesita una nueva función que ofrezca a los clientes la posibilidad de almacenar datos cifrados en la base de datos y que estos datos no puedan ser revelados ni siquiera por los administradores de la empresa. Los datos deben estar encriptados en el lado del cliente y almacenados en un formato cifrado. ¿Qué recomiendas para implementar esto?
+- Cifrado del lado del cliente con aurora y claves multiregionales de KMS
+
+Question 22:
+
+Tienes un bucket de S3 que está encriptado con SSE-KMS. Se te ha encargado replicar los objetos a un bucket de destino en la misma región de AWS, pero con una clave KMS diferente. Has configurado la replicación de S3, el bucket de destino y la clave KMS de destino y sigue sin funcionar. ¿Qué falta para que funcione la replicación de S3?
+- se tiene que configurar los permisos correspondientes para la clave de origen kms:decrypt y la de destino kms:encrypt para que sean utilizadas por el servicio de replicacion S3
+
+Question 23:
+
+Has generado un certificado público utilizando LetsEncrypt y lo has subido al ACM para poder utilizarlo y adjuntarlo a un Application Load Balancer que reenvía el tráfico a las instancias EC2. Como este certificado se genera fuera de AWS, no soporta la función de renovación automática. ¿Cómo podrías recibir una notificación 30 días antes de que este certificado caduque para poder generar uno nuevo manualmente?
+- Utilizar eventBridge para notificar a SNS de los eventos de caducidad diarios mediante correo electronico
+
+Question 24:
+
+Has creado la principal API Gateway optimizada para el borde en la región de AWS `us-west-2`. Esta API Gateway principal con optimización de bordes reenvía el tráfico a la API Gateway de segundo nivel en `ap-southeast-1`. Quieres asegurar la API Gateway principal adjuntándole un certificado ACM. ¿En qué región de AWS vas a crear el certificado ACM?
+- como el servicio que lidera es cloudfront el mismo solicita que los certificados esten siempre en us-east-1 independientemente del api gateway
+
+Question 25:
+
+Estás gestionando una AWS Organizations con varias cuentas de AWS. Cada cuenta tiene una aplicación independiente con diferentes recursos. Quieres una forma fácil de gestionar los Grupos de Seguridad y las Reglas WAF en todas esas cuentas, ya que hubo un incidente de seguridad la semana pasada y quieres reforzar tus recursos. ¿Qué servicio de AWS puede ayudarte a hacerlo?
+- AWS firewall manager
