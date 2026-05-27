@@ -98,3 +98,11 @@ Ejemplo: si el bloque CIDR es 10.0.0.0/24, las direcciones IP reservadas son:
 - Debe estar asociado a un router y a una tabla de rutas
 ![[Pasted image 20260527200436.png]]
 
+**Que es una route table?**
+Una route table es un mapa de rutas que permite definir por donde saldra el trafico de cada CIDR, por ejemplo:
+|Destino|Target|
+|---|---|
+|`10.0.0.0/16`|local|
+|`0.0.0.0/0`|igw-123|
+
+de esta manera todo el CIDR 10.0.0.0/16 se podra comunicar entre si en la VPC pero todo lo que no corresponda a ese CIDR saldra a internet
