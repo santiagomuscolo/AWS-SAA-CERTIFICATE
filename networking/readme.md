@@ -74,3 +74,27 @@ Ejemplo: si el bloque CIDR es 10.0.0.0/24, las direcciones IP reservadas son:
 > - No puedes elegir una subred de tamano /27 =32 direcciones por que - 5 te daria 27
 > - Una subred de tamano /26 es la ideal por que /26 = 64 direcciones - 5 te darian 59 direcciones disponibles
 
+## Vision general de subredes
+> [!info] Subred = subrango de direcciones IPv4 dentro de una VPC
+
+AWS por defecto reserva 5 direcciones IP en cada subred, estas 5 direcciones no quedan disponibles para su uso y no se pueden asignar a una instancia EC2.
+Ejemplo: si el bloque CIDR es 10.0.0.0/24, las direcciones IP reservadas son:
+- 10.0.0.0 - Direccion de red
+- 10.0.0.1 - reservada por AWS para el router de la VPC
+- 10.0.0.2 - reservada por AWS para asignar al DNS proporcionado por amazon
+- 10.0.0.3 - reservada por AWS para uso futuro
+- 10.0.0.255 - Direccion de difusion de red, AWS no soporta broadcast en una VPC, por lo que la direccion esta reservada
+
+> [!tip] Consejo de examen, si necesitas 29 direcciones IP que mascara necesitarias?
+> - No puedes elegir una subred de tamano /27 =32 direcciones por que - 5 te daria 27
+> - Una subred de tamano /26 es la ideal por que /26 = 64 direcciones - 5 te darian 59 direcciones disponibles
+
+## Puertas de enlace (Gateways) de internet y tablas de rutas
+> [!info] Internet Gateway permite que los recursos de una VPC se conecten a internet
+
+**Caracteristicas**:
+- Escala horizontalmente, tiene alta disponibilidad y redundancia
+- Solo puede estar conectado a una VPC y viceversa
+- Debe estar asociado a un router y a una tabla de rutas
+![[Pasted image 20260527200436.png]]
+
