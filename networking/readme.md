@@ -106,3 +106,23 @@ Una route table es un mapa de rutas que permite definir por donde saldra el traf
 |`0.0.0.0/0`|igw-123|
 
 de esta manera todo el CIDR 10.0.0.0/16 se podra comunicar entre si en la VPC pero todo lo que no corresponda a ese CIDR saldra a internet
+
+## Bastion host
+> [!info] aplicacion que se localiza en un servidor con la finalidad de proporcionar seguridad a la red interna
+
+- Podemos utilizar un bastion host para acceder mediante SSH a nuestras instancias EC2 privadas
+- El bastion esta en una subred publica, que a su vez esta conectada a todas las demas subredes privadas
+- **El grupo de seguridad del Bastion Host debe permtir** la entrada desde Internet en el puerto 22 desde un CIDR restringido, por ejemplo un CIDR publico de tu empresa
+- **El grupo de seguridad de las instancias EC2** debe permitir el grupo de seguridad del host Bastion, o la IP privada del bastion host.
+
+## Instancia NAT
+> [!info] fueron reemplazadas por los gateway NAT pero aun pueden aparecer en el examen
+
+**NAT = Traduccion de direcciones de red**
+
+- Permite que las instancias EC2 en subredes privadas puedan conectarse a internet
+- Debe lanzarse en una subred publica
+- Debe tener una IP elastica asociada 
+- Las tablas de ruta deben estar cofiguradas para dirigir el trafico de subredes privadas a la instancia NAT
+
+![[Pasted image 20260530145412.png]]![[Pasted image 20260530145600.png]]
