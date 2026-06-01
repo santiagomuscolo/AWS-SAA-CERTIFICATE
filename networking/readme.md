@@ -126,3 +126,29 @@ de esta manera todo el CIDR 10.0.0.0/16 se podra comunicar entre si en la VPC pe
 - Las tablas de ruta deben estar cofiguradas para dirigir el trafico de subredes privadas a la instancia NAT
 
 ![[Pasted image 20260530145412.png]]![[Pasted image 20260530145600.png]]
+
+## Gateway NAT
+El gateway NAT es gestionado por AWS, ofreciendo mayor ancho de banda, mayor disponibilidad y sin administracion. Por otro lado, ofrece un sistema de precios basado en su uso y ancho de banda con 5 Gbps de ancho de banda + escalado automatico hasta los 45 Gbps
+
+### Alta disponibilidad
+Los NATGW son resilientes dentro de una unica zona de disponibilidad pero para una mejor tolerancia a fallos se aconseja tener varios NATGW en varias AZ.
+
+> [!info] No es necesaria la conmutacion por error entre zonas de disponibilidad por que si una AZ se cae no necesitara un NATGW
+
+### NATGW vs Instancia NAT
+![[Pasted image 20260601200646.png]]
+
+## NACL y grupos de seguridad
+> [!info] NACL = network access control list
+
+### High level work
+![[Pasted image 20260601202225.png]]
+
+## Overview
+Las NACL (network access control list) son como un firewall que controla el trafico desde y hacia las subredes, en AWS se crea una NACL por subred al cual se le definen reglas:
+- Las reglas tienen un numero de entre 1 - 32766, mayor precedencia con un numero menor.
+- La primera coincidencia de reglas determinara la decision
+- La ultima regla es un asterisco (*) y deniega una peticion en casod e que no coincida con ninguna regla.
+- El estandar es agregar reglas de a 100
+
+Las NACL recien creadas por defecto denegaran todo hasta que se definan sus reglas y son una buena forma de bloquear una direccion IP concreta a nivel de subred
