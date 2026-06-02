@@ -152,3 +152,25 @@ Las NACL (network access control list) son como un firewall que controla el traf
 - El estandar es agregar reglas de a 100
 
 Las NACL recien creadas por defecto denegaran todo hasta que se definan sus reglas y son una buena forma de bloquear una direccion IP concreta a nivel de subred
+
+La NACL por defecto aceptara todo lo que entra/sale y se aconseja no modificarla sino crear nuevas personalizadas.
+
+### Puertos efimeros
+Para que dos endpoints cualesquiera establezcan una conexion, deben utilizar puertos. Los clientes se conectan a un puerto definido, y esperan una respuesta en un puerto efimero que puede variar en distintos rangos segun el OS.
+![[Pasted image 20260602193856.png]]
+
+> [!info] es importante tener en cuenta que si presentamos multiples subredes (publicas/privadas) debemos editar las reglas de NACL para poder permitir las multiples combinaciones de conexiones
+
+![[Pasted image 20260602194054.png]]
+
+### Grupo de seguridad vs NACL
+![[Pasted image 20260602194125.png]]
+
+
+### Diferencia Bastion Host vs NATGW
+
+**Bastion Host**
+Punto de entrada a recursos privados (siendo generalmente una instancia EC2) que puede recibir conexiones entrantes y salientes, evitando que las instancias privadas obtengan internet directamente
+
+**NATGW**
+Sirve para que recursos privados puedan salir a internet sin ser expuestos, en los mismos no se reciben conexiones entrantes pero si salientes y se enmascara/protege la IP privada de cara a internet, ademas este permite que las intancias posean internet directamente.
