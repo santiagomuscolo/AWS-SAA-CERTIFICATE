@@ -174,3 +174,17 @@ Punto de entrada a recursos privados (siendo generalmente una instancia EC2) que
 
 **NATGW**
 Sirve para que recursos privados puedan salir a internet sin ser expuestos, en los mismos no se reciben conexiones entrantes pero si salientes y se enmascara/protege la IP privada de cara a internet, ademas este permite que las intancias posean internet directamente.
+
+## VPC Peering
+VPC peering permite conectar de forma privada dos o mas VPC utilizando la red de AWS, la conexion no es transitiva, es decir, debe establecerce en todas las VPC que necesiten comunicarse entre si.
+
+> [!info] Se deben actualizar las tablas de rutas de las subredes para que las instancias puedan comunicarse entre si
+
+![[Pasted image 20260603125929.png]]
+
+## VPC Endpoints
+Estos endpoints nos permiten de forma privada acceder a servicios de AWS sin la necesidad de usar un internetGateway para ir a ellos por medio de internet (ya que cada servicio de AWS esta expuesto a internet con una URL publica), de esta manera evitamos hops, es mas eficiente y seguro.
+
+**Tipos de endpoints**
+- Endpoints de interfaz: funcionan con private link (ENI) como punto de entrada y debe adjuntarsele grupos de seguridad, soporta la mayoria de servicios de AWS y tienen un coste monetario por hora + GB de datos procesados
+- Endpoints Gateway: Proporcionan un gateway y debe utilizarse como destino en la tabla de rutas, el mismo no utiliza grupos de seguridad y soporta dynamoDB y S3, siendo ademas gratis.
