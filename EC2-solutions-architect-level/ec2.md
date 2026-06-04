@@ -105,3 +105,17 @@
 - Volumen root - debe ser EBS, encriptado.
 - Disponible para instancias bajo demanda, reservadas y Spot.
 - Una instancia NO puede estar hibernada mas de 60 dias.
+
+## Logs de flujo de la VPC
+Los logs de flujo de una VPC capturan el trafico IP entre nuestras interfaces:
+- Logs de flujo de subred
+- Logs de flujo de VPC
+- logs de flujo de ENI
+
+y posee integracion con S3 / Cloudwatch logs
+
+**Cuerpo de un log**
+![[Pasted image 20260604160502.png]]
+
+**Arquitecturas**
+![[Pasted image 20260604160535.png]]
