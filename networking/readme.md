@@ -188,3 +188,42 @@ Estos endpoints nos permiten de forma privada acceder a servicios de AWS sin la 
 **Tipos de endpoints**
 - Endpoints de interfaz: funcionan con private link (ENI) como punto de entrada y debe adjuntarsele grupos de seguridad, soporta la mayoria de servicios de AWS y tienen un coste monetario por hora + GB de datos procesados
 - Endpoints Gateway: Proporcionan un gateway y debe utilizarse como destino en la tabla de rutas, el mismo no utiliza grupos de seguridad y soporta dynamoDB y S3, siendo ademas gratis.
+
+## Logs de flujo de la VPC
+Los logs de flujo de una VPC capturan el trafico IP entre nuestras interfaces:
+- Logs de flujo de subred
+- Logs de flujo de VPC
+- logs de flujo de ENI
+
+y posee integracion con S3 / Cloudwatch logs
+
+**Cuerpo de un log**
+![[Pasted image 20260604160502.png]]
+
+**Arquitecturas**
+![[Pasted image 20260604160535.png]]
+
+## VPN site to site
+![[Pasted image 20260605163453.png]]
+
+- Virtual private gateway / gateway privado virtual (VGW)
+	- Concentrador VPN en el lado AWS de la conexion VPN
+	- La VGW se crea y se adjunta a la VPC desde la que quieres crear la conexion VPN site-to-site
+	- Posibilidad de personalizar el ASN (Numero de Sistema Autonomo)
+- Gateway del cliente (CGW)
+	- Aplicacion de software o dispositivo fisico en el lado del cliente de la conexion VPN
+
+- Dispositivo gateway del lado del cliente (en las instalaciones)
+	- Que direccion IP utilizar
+		- Direccion Ip publica enrutable por internet para tu dispositivo Gateway del cliente
+		- Si estas detras de un dispositivo NAT habilitado para atravesar NAT (NAT-T), utiliza la direccion IP publica del dispositivo NAT
+- La propagacion de rutas debe estar habilitada para la puerta de enlace virtual en la tabla de rutas asociada a tus subredes
+- Si necesitas hacer PING a tus instancias EC2 desde el local, asegurate de agregar el protocolo ICMP en la entrada de tus grupos de seguridad
+
+![[Pasted image 20260605164412.png]]
+
+**VPN de AWS CloudHub**
+- Proporciona una comunicacion segura (cifrada) si se tiene varias conexiones VPN
+- Modelo hub-and-spoke de bajo coste para la conectividad de red primaria o secundaria entre distintas sedes
+- Es una conexion VPN, asi que va por internet publico
+- Para configurarla, se necesita conectar varias VPN en la misma Virtual Private Gateway, establecer un enrutamiento dinamico y configurar tablas de rutas
