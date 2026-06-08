@@ -227,3 +227,38 @@ y posee integracion con S3 / Cloudwatch logs
 - Modelo hub-and-spoke de bajo coste para la conectividad de red primaria o secundaria entre distintas sedes
 - Es una conexion VPN, asi que va por internet publico
 - Para configurarla, se necesita conectar varias VPN en la misma Virtual Private Gateway, establecer un enrutamiento dinamico y configurar tablas de rutas
+
+## Direct connect (DX) & Direct connect gateway
+
+**Direct connect**
+Direct connect permite crear una conexion privada desde una red remota a tu VPC, permitiendo acceder a recursos publicos y privados en la misma conexion, con soporte IPv4 e IPv6.
+
+**Casos de uso**
+- Aumentar el rendimiento del ancho de banda - trabajar con grandes conjuntos de datos - menor coste
+- Experiencia de red mas consistente - aplicaciones que utilizan alimentacion de datos en tiempo real
+- Entornos hibridos (on prem + cloud)
+
+**Diagrama**
+![[Pasted image 20260608151900.png]]
+
+Hay un caso de uso concreto en el que puede querer conectarse un direct connect a multiples VPCs en diferentes regiones, esto implica el uso de un direct connect gateway para habilitar dicha comunicacion.![[Pasted image 20260608152057.png]]
+
+**Tipos de conexion**
+- Conexiones dedicadas: capacidad de 1 Gbps, 10 Gbps y 100 Gbps
+	- Puerto ethernet fisico dedicado a un cliente
+	- Primero se hace la peticion a AWS y luego la completan los socios de AWS Direct Connect
+- Conexiones alojadas: 50 Mbps, 500 Mbps a 10 Gbps
+	- Las peticiones de conexion se realizan a traves de los socios de AWS Direct Connect
+	- Se puede agregar o eliminar capacidad bajo demanda
+	- 1, 2, 5, 10 Gbps disponibles en socios selectos de AWS Direct Connect
+- Los plazos para establecer una conexion suelen ser superiores a un mes.
+
+**Cifrado**
+Los datos en transito no estan cifrados pero si son privados, ya que residen en una conexion privada. Por otro lado, existe una forma de agregar una capa extra de seguridad integrando DC + VPN (Virtual Private Network) para proporcionar una conexion privada cifrada mediante IPsec.
+
+**Resiliencia**
+![[Pasted image 20260608153612.png]]
+
+## Direct connect + VPN site-to-site
+En caso de que direct connect falle, se puede configurar una conexion de reserva de direct connect (opcion cara e ineficiente), o una conexion VPN site-to-site (sitio-a-sitio)
+![[Pasted image 20260608153909.png]]
