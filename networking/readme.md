@@ -262,3 +262,33 @@ Los datos en transito no estan cifrados pero si son privados, ya que residen en 
 ## Direct connect + VPN site-to-site
 En caso de que direct connect falle, se puede configurar una conexion de reserva de direct connect (opcion cara e ineficiente), o una conexion VPN site-to-site (sitio-a-sitio)
 ![[Pasted image 20260608153909.png]]
+
+## Transit Gateway
+![[Pasted image 20260609164255.png]]
+Cuando se busca tener peering transitivo entre miles de VPC y en las instalaciones de utiliza un patron denominado hub-and-spoke (estrella) promovido en AWS con Transit Gateway para resolver esta problematica, funciona con DC & VPN y soporta IP multicast.
+
+> [!info] IP multicast hace referencia al proceso en el que un solo emisor transmite a multiples receptores al mismo tiempo, en AWS solo Transit Gateway puede hacerlo.
+
+**VPN site-to-site ECMP**
+- ECMP = enrutamiento multitrayectoria de igual coste
+- Estrategia de enrutamiento que permite reenviar un paquete por multiples rutas optimas
+- Caso practico: crear varias conexiones VPN site-to-site para aumentar el ancho de banda de tu conexion a AWS.
+	![[Pasted image 20260609164638.png]]
+	![[Pasted image 20260609164836.png]]
+
+**Direct connect + Transit Gateway**
+![[Pasted image 20260609165005.png]]
+## VPC Traffic mirroring (Observability)
+VPC mirroring es una feature que te permite capturar e inspeccionar el trafico de red de tu VPC, realizando una copia del mismo (duplicado del trafico) y enviandolo a otro destino para su inspeccion.
+
+La captura del trafico puede producirse:
+- Desde (Fuente): ENIs
+- Hacia (objetivos): una ENI o un Network Load Balancer
+
+Esta feature nos permite capturar todos los paquetes entrantes o solo los paquetes que nos interesen, ademas de permitirnos tener todo en una VPC o en multiples VPC (VPC peering).
+Casos de uso relacionados pueden ser:
+- Inspeccion de contenidos
+- Monitorizacion de amenazas
+- Resolucion de problemas
+
+![[Pasted image 20260609171854.png]]
