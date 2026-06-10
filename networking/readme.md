@@ -292,3 +292,26 @@ Casos de uso relacionados pueden ser:
 - Resolucion de problemas
 
 ![[Pasted image 20260609171854.png]]
+
+## IPv6 para VPC
+
+**Que es IPv6?**
+IPv6 nace como sucesor de IPv4 debido a la cantidad de direcciones que este puede proporcionar (4.300 millones), siendo que IPv6 esta diseñado para proporcionar 3.4 x 10'38 direcciones IP unicas.
+Cada direccion IPv6 es unica y enrutable a internet (no hay rango privado) y el formato es el siguiente: x.x.x.x.x.x.x (x es hexadecimal, el rango puede ser de 0000 a ffff).
+
+Ejemplo: 2001:db8:3333:4444:5555:6666:7777:8888
+
+**IPv6 en VPC**
+No se puede deshabilitar IPv4 para las subredes y VPCs sino que podemos habilitar IPv6 para funcionar en modo dual stack (ipv4 & ipv6), de esta manera nuestras instancias EC2 tendran almenos una IPv4 interna privada y una IPv6 publica y pueden comunicarse a internet con cualquiera de las dos.
+![[Pasted image 20260610202349.png]]
+
+**Solucion a problemas de IPv6**
+Al no poder deshabilitar IPv4 en nuestras subredes y VPC si no podemos levantar una instancia dentro de la misma es imposible que sea por falta de direcciones IPv6 ya que existen muchisimas, en todo caso es por que agotamos el rango de IPv4 disponibles de nuestro Classless inter-domain routing (CIDR), por lo que deberemos crear otro para asi levantar nuevas instancias.
+![[Pasted image 20260610202707.png]]
+
+## Gateway de internet solo de salida
+Dentro de el internet gateway tenemos una opcion que nos permite establecer un gateway solo de salida para IPv6 (funciona de forma muy similar a un NAT gateway).
+![[Pasted image 20260610204457.png]]
+
+**Enrutamiento IPv6**
+![[Pasted image 20260610204846.png]]
