@@ -315,3 +315,25 @@ Dentro de el internet gateway tenemos una opcion que nos permite establecer un g
 
 **Enrutamiento IPv6**
 ![[Pasted image 20260610204846.png]]
+
+## Costes de red en AWS
+![[Pasted image 20260612134359.png]]
+
+**Minimizar el coste de la red en trafico de salida**
+- Trafico de salida: trafico saliente (de AWS al exterior)
+- Trafico de entrada: trafico entrante - del exterior a AWS (normalmente gratis)
+- Intenta mantener la mayor cantidad de trafico de internet dentro de AWS para minimizar los costes
+- Las ubicaciones de Direct Connect situadas en la misma region de AWS tienen un coste inferior para la red de salida
+![[Pasted image 20260612134857.png]]
+
+**Gateway NAT vs Gateway VPC endpoint**
+![[Pasted image 20260612140347.png]]
+## Firewall de red AWS
+proporciona proteccion de capa 3 a capa 7 para toda tu amazon VPC y puede inspeccionarse en cualquier direccion
+- Trafico de VPC a VPC
+- Saliente a internet
+- Entrante desde internet
+- Hacia / desde Direct connect y VPN site-to-site
+
+Internamente AWS network firewall usa AWS gateway load balancer y las reglas del mismo pueden gestionarse de forma centralizada entre cuentas de AWS firewall manager para aplicarlas a muchas VPC.
+![[Pasted image 20260612140824.png]]
