@@ -337,3 +337,110 @@ proporciona proteccion de capa 3 a capa 7 para toda tu amazon VPC y puede inspec
 
 Internamente AWS network firewall usa AWS gateway load balancer y las reglas del mismo pueden gestionarse de forma centralizada entre cuentas de AWS firewall manager para aplicarlas a muchas VPC.
 ![[Pasted image 20260612140824.png]]
+
+## Quiz
+
+Question 1:
+
+¿A qué corresponde el CIDR `10.0.4.0/28`?
+10.0.4.0 a 10.0.4.15
+
+Question 2:
+
+Tienes una red corporativa de tamaño `10.0.0.0/8` y una oficina satélite de tamaño `192.168.0.0/16`. ¿Qué CIDR es aceptable para tu VPC de AWS si piensas conectar tus redes más adelante?
+- Debemos seleccionar la maxima IPv4 privada siendo esta 172.16.0.0/16 que es el maximo CIDR disponible en AWS
+
+Question 3:
+
+Tienes previsto crear una subred y quieres que tenga al menos capacidad para 28 instancias EC2. ¿Cuál es el tamaño mínimo que debes tener para tu subred?
+- /26 ya que necesitamos 28 ips para las instancias y 5 para aws
+
+Question 4:
+
+Los Grupos de Seguridad operan a nivel de ................. mientras que las NACL operan a nivel de ..................
+- Instancia EC2, subred
+
+Question 5:
+
+Has conectado una Gateway de Internet a tu VPC, pero tus instancias EC2 siguen sin tener acceso a Internet. ¿Qué **NO** es un posible problema?
+- Grupos de seguridad (estos son estatales, eso quiere decir que si el trafico puede salir puede volver a entrar)
+
+Question 6:
+
+Te gustaría proporcionar acceso a Internet a tus instancias EC2 en subredes privadas con IPv4, asegurándote al mismo tiempo de que esta solución requiere la menor cantidad de administración y se escala sin problemas. ¿Qué deberías utilizar?
+- Nat gateway
+
+Question 7:
+
+Se ha habilitado el VPC Peering entre la VPC A y la VPC B, y se han actualizado las tablas de rutas para la VPC A. Pero, las instancias EC2 no pueden comunicarse. ¿Cuál es el problema más probable?
+- Lo mas probable es que sean las tablas de rutas de la VPC B
+
+Question 8:
+
+Has configurado una conexión de Conexión Directa entre tu centro de datos corporativo y tu VPC A en tu cuenta de AWS. También necesitas acceder a la VPC B en otra región de AWS desde tu centro de datos corporativo. ¿Qué debes hacer?
+- Utiliza un gateway de direct connect
+
+Question 9:
+
+Al utilizar VPC Endpoints, ¿cuáles son los dos únicos servicios de AWS que tienen un Gateway Endpoint disponible?
+- S3 y DynamoDB
+
+Question 10:
+
+AWS reserva 5 direcciones IP cada vez que creas una nueva subred en una VPC. Cuando creas una subred con CIDR `10.0.0.0/24`, se reservan las siguientes direcciones IP, **EXCEPTO** ....................
+- se reserva la .0, .1, .2, .3 y .255
+
+Question 11:
+
+Tienes 3 VPCs A, B y C. Quieres establecer una VPC Peering connection entre las 3 VPCs. ¿Qué debes hacer?
+- La conexion no es transitiva por lo que debe establecerse 3 peering connections: A-B, A-C, B-C
+
+Question 12:
+
+¿Cómo puedes capturar información sobre el tráfico IP dentro de tus VPCs?
+- Habilitar los logs de flujo de la VPC
+
+Question 13:
+
+Si quieres una conexión de conexión directa (Direct Connect) de 500 Mbps entre tu centro de datos corporativo y AWS, elegirías una conexión ...................
+- Alojada, la cantidad no amerita una conexion dedicada
+
+Question 14:
+
+Cuando configuras una conexión VPN de sitio a sitio de AWS entre tu centro de datos corporativo en las instalaciones y las VPC en el Cloud de AWS, ¿cuáles son los dos componentes principales que quieres configurar para esta conexión?
+- Gateway Privado Virtual y Gateway del cliente
+
+Question 15:
+
+Tu empresa tiene varias sedes locales en Estados Unidos. Estas sedes están actualmente enlazadas mediante conexiones privadas, pero tu proveedor de conexiones privadas ha sido recientemente bastante inestable, lo que ha hecho que tu arquitectura de IT esté parcialmente desconectada. Te gustaría crear una conexión de reserva que utilizara la Internet pública para enlazar tus sedes locales, y que pudieras recuperar en caso de problemas con tu proveedor. ¿Qué recomiendas?
+- AWS VPN CloudHub ya que te permite comunicarte de forma segura con varios sitios enlazados utilizando AWS VPN.
+
+Question 16:
+
+Tienes que establecer una conexión dedicada entre tu centro de datos corporativo local y AWS Cloud. Esta conexión debe ser privada, consistente, y el tráfico no debe viajar a través de Internet. ¿Qué servicio de AWS debes utilizar?
+- AWS direct connect
+
+Question 17:
+
+Utilizando una conexión de Conexión Directa, puedes acceder tanto a los recursos públicos como a los privados de AWS.
+- Verdadero
+
+Question 19:
+
+Tienes una VPC en tu cuenta de AWS que se ejecuta en modo de doble stack. Intentas continuamente lanzar una instancia EC2, pero falla. Tras una investigación más profunda, has descubierto que ya no tienes direcciones IPv4 disponibles. ¿Qué debes hacer?
+- Agrega un CIDR Ipv4 adicional a tu VPC
+
+Question 20:
+
+El backend de una aplicación web está alojado en instancias de EC2 en subredes privadas, con un Load Balancer de aplicaciones en subredes públicas. Es necesario dar a algunos de los desarrolladores acceso a las instancias EC2 del backend, pero sin exponer las instancias EC2 del backend a Internet. Has creado una instancia EC2 de host bastión en la subred pública y has configurado el Grupo de Seguridad de las instancias EC2 backend para permitir el tráfico desde el host bastión. ¿Cuál de las siguientes es la mejor configuración para el Grupo de Seguridad del host bastión para hacerlo seguro?
+- Permite el trafico desde el puerto 22 (SSH) desde el CIDR publico de la empresa
+
+Question 21:
+
+Una empresa ha configurado una conexión de Conexión Directa entre su centro de datos corporativo y AWS. Es necesario preparar una conexión de respaldo segura y rentable en caso de que haya problemas con esta conexión de Conexión Directa. ¿Cuál es la solución más rentable y segura que recomiendas?
+- Se puede configurar una VPN site-to-site de respaldo
+
+Question 22:
+
+¿Qué servicio de AWS te permite proteger y controlar el tráfico en tu VPC desde la capa 3 hasta la capa 7?
+- AWS Network Firewall
