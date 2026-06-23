@@ -94,3 +94,36 @@ DMS es un servicio de AWS que permite migrar bases de datos a AWS de forma segur
 SCT convierte el esquema de tu base de datos de un motor a otro por ejemplo:
 - OLTP (SQL server u Oracle): a MySQL, Postgre o Aurora
 - OLAP (Teradata u Oracle): a redshift
+
+## Migraciones RDS y Aurora
+
+**MySQL**
+- RDS MySQL a aurora MySQL
+	- Opcion 1: Snapshots de BD de MySQL RDS restaurados como BD Aurora MySQL
+	- Opcion 2: Crea una replica de lectura Aurora a partir de tu RDS MySQL, y cuando el retardo de replicacion sea 0, promuevela como su propio Cluster de BD (puede llevar tiempo y costar $)
+- MySQL externo a MySQL Aurora
+	- Opcion 1: Utilizar Percona XtraBackup para crear una copia de seguridad de archivos en Amazon S3, luego crear una BD Aurora MySQL desde Amazon S3
+	- Opcion 2: Crear una BD MySQL de Aurora y utilizad la utilidad mysqldump para migrar MySQL a Aurora (mas lento que el metodo S3)
+- Utilizar DMS si ambas bases estan en funcionamiento
+- ![[Pasted image 20260622205917.png]]
+
+**PostgreSQL**
+Dentro de AWS la migracion es identica a la de MySQL pero con una Postgres externa es ligeramente diferente:
+- Se puede crear una copia de seguridad y ponerla en Amazon S3 para luego importarla utilizando la extension aws_s3 de Aurora
+Y por ultimo podemos usar DMS como en MySQL
+![[Pasted image 20260622210115.png]]
+## Estrategia on-premise con AWS
+- Posibilidad de descargar Amazon Linux 2 AMI como VM (formato .iso)
+- Importacion / Exportacion de VM
+	- Migrar aplicaciones existentes a EC2
+	- Crea una estrategia de repositorio DR para tus VM locales
+	- Puedes volver a exportar las maquinas virtuales de EC2 a las locales
+- Servicio de descubrimiento de aplicaciones de AWS
+	- Recopila informacion sobre tus servidores locales para planificar una migracion
+	- Utilizacion de servidores y asignaciones de dependencias
+	- Realizar un seguimiento con AWS Migration Hub
+- Servicio de Migracion de Bases de datos AWS (DMS)
+	- Replica On-premise => AWS, AWS => AWS, AWS => On-premise
+	- Funciona con varias tecnologias de bases de datos (Oracle, MySQL, DynamoDB, etc...)
+- Servicio de migracion de servidores de AWS (SMS)
+	- Replicacion incremental de servidores activos locales a AWS
