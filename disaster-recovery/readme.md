@@ -127,3 +127,18 @@ Y por ultimo podemos usar DMS como en MySQL
 	- Funciona con varias tecnologias de bases de datos (Oracle, MySQL, DynamoDB, etc...)
 - Servicio de migracion de servidores de AWS (SMS)
 	- Replicacion incremental de servidores activos locales a AWS
+
+## AWS Backup
+Backup es un servicio que nos permitira centralizar y gestionar backups en AWS, soportando servicios como:
+- EC2 / EBS
+- S3
+- RDS / Aurora / DynamoDB
+- DocumentDB / Neptune
+- EFS / FSx (Lustre y servidor de archivos de Windows)
+- Storage Gateway (Volume Gateway)
+
+Un punto clave de este servicio es que soporta backups entre regiones y entre cuentas. Por otro lado, este servicio nos brinda **politicas de seguridad** conocidas tambien como **planes de copia de seguridad**
+- Frecuencia de la copia de seguridad
+- Ventana de la copia de seguridad
+- Transicion al almacenamiento en frio
+- Periodo de retencion
