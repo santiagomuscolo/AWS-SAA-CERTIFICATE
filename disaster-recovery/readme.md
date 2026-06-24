@@ -142,3 +142,42 @@ Un punto clave de este servicio es que soporta backups entre regiones y entre cu
 - Ventana de la copia de seguridad
 - Transicion al almacenamiento en frio
 - Periodo de retencion
+
+## AWS Application Discovery service
+Este servicio nos permite planificar la migracion de proyectos a AWS recopilando informacion sobre centros de datos locales, actualmente nos ofrece dos opciones:
+- Descubrimiento sin agente
+	- Inventario de maquinas virtuales, configuracion e historial de rendimiento, uso de la CPU, la memoria y el disco.
+- Descubrimiento basado en agentes (AWS Application Discovery Agent)
+	- Configuracion del sistema, rendimiento del sistema, procesos en ejecucion y detalles de las conexiones de red entre sistemas.
+
+Todos estos datos recopilados son visibles en AWS Migration Hub
+
+**AWS Application Migration Service (MGN)**
+Este servicio nos permite mediante una solucion lift-and-shift simplificar la migracion de aplicaciones a AWS, convirtiendo servidores fisicos, virtuales y basados en la nube para que se ejecuten de manera nativa en AWS
+![[Pasted image 20260624170835.png]]
+
+## Transferir grandes conjuntos de datos a AWS
+- Ejemplo: transferir 200TB de datos en el Cloud. Teniendo una conexion a internet de 100 Mbps.
+- **A traves de internet / VPN site-to-site**
+	- Configuracion inmediata
+	- Tardara 200TBx1000gbx1000mbx8mb/100mbs = 16.000.000s = 185d
+- **Sobre direct connect 1Gbps**
+	- Mucho tiempo para la configuracion unica (mas de un mes)
+	- Tardara 200TBx1000gbx8gb/1 gbps = 1.600.000s = 18.5d
+- **Sobre snowball**
+	- Llevara de 2 a 3 snowballs en paralelo
+	- La transferencia de extremo a extremo se podria hacer en 1 semana
+	- Puede combinarse con Database Migration Service
+- **Para replicacion/transferencias en curso**
+	- VPN site-to-site o DX con DMS o DataSync
+
+## VMware Cloud en AWS
+Para empezar debemos saber que es una VMware:
+VMware es un software que permite crear maquinas virtuales dentro de tu propia computadora, algo asi como tener muchas submaquinas dentro de la tuya cada una con su propio OS.
+Ahora bien en AWS frente a la migracion de VMware desde las instalaciones al cloud se nos presenta VMware cloud permitiendo seguir utilizando el software aun en la infrestructura basada en la nube de Amazon
+![[Pasted image 20260624174159.png]]
+
+Casos practicos:
+- Migrar capas de trabajo basadas en VMware vSphere a AWS.
+- Ejecuta tus cargas de trabajo de produccion en entornos de nube privada, publica e hibrida basados en VMware vSphere.
+- Tener una estrategia de recuperacion de desastres.
