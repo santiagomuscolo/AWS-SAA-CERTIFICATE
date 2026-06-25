@@ -181,3 +181,68 @@ Casos practicos:
 - Migrar capas de trabajo basadas en VMware vSphere a AWS.
 - Ejecuta tus cargas de trabajo de produccion en entornos de nube privada, publica e hibrida basados en VMware vSphere.
 - Tener una estrategia de recuperacion de desastres.
+
+## Quiz
+
+Question 1:
+
+Como parte de tu plan de recuperación de desastres, te gustaría tener sólo la infraestructura crítica en funcionamiento en AWS. No te importa un Objetivo de Tiempo de Recuperación (RTO) más largo. ¿Qué estrategia de RD recomiendas?
+- Luz piloto, este maneja lo minimo e indispensable para sobrevivir
+
+Question 2:
+
+Te gustaría obtener la estrategia de Recuperación de Desastres con el menor Objetivo de Tiempo de Recuperación (RTO) y Objetivo de Punto de Recuperación (RPO), independientemente del coste. ¿Qué DR deberías elegir?
+- Estrategia multisitio, es una replica funcional exactamente identica de la app principal
+
+Question 3:
+
+¿Cuál de las siguientes estrategias de Recuperación de Desastres tiene un Objetivo de Punto de Recuperación (RPO) y un Objetivo de Tiempo de Recuperación (RTO) potencialmente altos?
+- Copia de seguridad y restauracion (backup)
+
+Question 4:
+
+Quieres hacer un plan de Recuperación de Desastres en el que tengas una versión reducida de tu sistema en funcionamiento, y cuando ocurra un desastre, se amplíe rápidamente. ¿Qué estrategia de RD debes elegir?
+- Espera caliente, es la unica version reducida que puede escalar
+
+Question 5:
+
+Tienes una base de datos Oracle local que quieres migrar a AWS, concretamente a Amazon Aurora. ¿Cómo harías la migración?
+- Primero se utiliza SCT (schema conversion tool) para convertir los esquemas y luego DMS (database migration service) para migrar los datos.
+
+Question 6:
+
+Tienes archivos y documentos sensibles on-premise que quieres sincronizar regularmente a AWS para mantener otra copia. ¿Qué servicio de AWS puede ayudarte con eso?
+- AWS DataSync es ideal para esto ya que se especializa en la transferencia de datos en linea con una velocidad decente.
+
+Question 7:
+
+AWS DataSync soporta las siguientes ubicaciones, EXCEPTO ....................
+- ==AWS EBS... solamente soporta EFS, FSx y S3==
+
+Por que?
+EBS funciona a nivel bloque (maneja bloques de disco a bajo nivel) y es montado dentro de una EC2 por lo que no es directamente accesible por internet, su contraparte EFS si es aceptada por que es accesible por internet y funciona a nivel Path que es lo que DataSync necesita.
+
+Question 8:
+
+Estás ejecutando muchos recursos en AWS, como instancias EC2, volúmenes EBS, tablas DynamoDB... Quieres una forma fácil de gestionar las copias de seguridad de todos estos servicios de AWS desde un único lugar. ¿Qué oferta de AWS facilita este proceso?
+- AWS Backup
+
+Question 9:
+
+Una empresa planea migrar sus sitios web, aplicaciones, servidores, máquinas virtuales y datos existentes a AWS. Quieren hacer una migración con un tiempo de inactividad mínimo y costes reducidos. ¿Qué servicio de AWS puede ayudar en este escenario?
+- AWS Application Migration Service
+
+Question 10:
+
+Una empresa utiliza VMware en su centro de datos local para gestionar su infraestructura. Se necesita ampliar su centro de datos y su infraestructura a AWS, pero seguir utilizando el stack tecnológico que usan, que es VMware. ¿Qué servicio de AWS pueden utilizar?
+- VMware cloud AWS
+
+Question 11:
+
+Una empresa utiliza RDS para MySQL como base de datos principal, pero últimamente se enfrenta a problemas de gestión de la base de datos, de rendimiento y de escalabilidad. Y han decidido utilizar Aurora para MySQL en su lugar para obtener un mejor rendimiento, menos complejidad y menos tareas administrativas necesarias. ¿Cuál es la mejor manera y la más rentable de migrar de RDS para MySQL a Aurora para MySQL?
+- Se puede crear una snaphost de RDS y restaurarla en Aurora MySQL
+
+Question 12:
+
+¿Qué servicio de AWS puedes utilizar para automatizar la copia de seguridad en diferentes servicios de AWS como RDS, DynamoDB, Aurora y los sistemas de archivos EFS y volúmenes EBS?
+- Copia de seguridad de AWS (AWS Backup)
