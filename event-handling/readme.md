@@ -21,3 +21,22 @@ ofreciendo:
 - Opciones avanzadas de filtrado con reglas JSON (metadatos, size del objeto, nombre)
 - Multiples destinos - funciones step, kinesis streams / firehose
 - capacidades de eventbridge - archivar, repeticion de eventos, entrega fiable
+
+## Estrategias de almacenamiento en cache
+![[Pasted image 20260629195952.png]]
+## Bloquear una direccion IP en AWS
+
+**NACL, SG y Firewall software**
+![[Pasted image 20260629200405.png]]
+
+**NLB**
+![[Pasted image 20260629201254.png]]
+
+**ALB**
+![[Pasted image 20260629201311.png]]
+
+**ALB + WAF**
+![[Pasted image 20260629201501.png]]
+
+**ALB + CLoudfront + WAF**
+![[Pasted image 20260629201623.png]]
