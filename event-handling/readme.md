@@ -40,3 +40,35 @@ ofreciendo:
 
 **ALB + CLoudfront + WAF**
 ![[Pasted image 20260629201623.png]]
+
+## High performance computing
+En el HPC se busca crear un numero muy elevado de recursos en muy poco tiempo, permitiendo acelerar el tiempo de obtencion de los resultados agregando mas recursos y solamente pagar por lo utilizado.
+High performance computing es un termino muy utilizado en la quimica computacional, modelizacion de riesgos financieros, prediccion meteorologica, aprendizaje profundo, conduccion autonoma.
+
+Que servicios ayudan a realizar HPC?
+
+- Gestion y transferencias de datos
+	- AWS Direct connect: Mover GB/s de datos al cloud, a traves de una red privada
+	- Snowball y Snowmobile: mover PB de datos al Cloud
+	- DataSync: mover grandes cantidades de datos entre instalaciones hacia S3, EFS, FSx
+- Informatica y redes
+	- Instancias EC2: Optimizadas para CPU y GPU
+	- Grupos de colocacion EC2: Cluster para buen rendimiento de red
+	- ![[Pasted image 20260630193629.png]]
+	- Redes mejoradas EC2 (SR-IOV): Mayor ancho de banda, mayor paquetes por segundo y menor latencia
+		- ENA (Elastic Network Adapter) hasta 100 GBps
+		- Intel 82599 VF haasta 10 gbps - legacy
+	- Adaptador Elastic Fabric (EFA)
+		- ENA mejorado para HPC, solo funcional en linux
+		- Excelente para comunicaciones entre nodos y cargas de trabajo estrechamente acopladas
+- Almacenamiento
+	- Conectado a la instancia
+		- EBS: hasta 256.000 IOPS con io2 block express
+		- Instance Store: escala a millones de IOPS, vinculado a la instancia EC2, baja latencia
+	- Almacenamiento de red
+		- S3: blob grande, no es un sistema de archivos
+		- EFS: escala IOPS en funcion del size total, o utiliza IOPS provisionadas
+		- FSx para lustre: Sistema de archivos distribuido optimizado para HPC que escala a millones de IOPS
+- Automatizacion y orquestacion
+	- AWS Batch: permite soportar multiples trabajos en paralelo multinodo
+	- AWS ParallelCluster: Herramienta de gestion de cluster de codigo abierto para implementar HPC en AWS
