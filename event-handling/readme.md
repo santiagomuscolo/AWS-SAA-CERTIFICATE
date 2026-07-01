@@ -72,3 +72,20 @@ Que servicios ayudan a realizar HPC?
 - Automatizacion y orquestacion
 	- AWS Batch: permite soportar multiples trabajos en paralelo multinodo
 	- AWS ParallelCluster: Herramienta de gestion de cluster de codigo abierto para implementar HPC en AWS
+
+
+	## Quiz
+Question 1:
+
+Estás trabajando en una aplicación sin servidor en la que quieres procesar objetos subidos a un bucket de S3. Has configurado S3 Events en tu bucket de S3 para invocar una función Lambda cada vez que se sube un objeto. Quieres asegurarte de que los eventos que no se pueden procesar se envíen a una cola de letra muerta (DLQ) para su posterior procesamiento. ¿Qué servicio de AWS debes utilizar para configurar la DLQ?
+- La funcion lambda es asincrona, por lo que el DLQ debe establecerse en el lado de la funcion.
+
+Question 2:
+
+Como Arquitecto de Soluciones, has creado una arquitectura para una empresa que incluye los siguientes servicios de AWS CloudFront, Web Application Firewall (AWS WAF), AWS Shield, Application Load Balancer e instancias EC2 gestionadas por un Auto Scaling Group. A veces, la empresa recibe solicitudes maliciosas y quiere bloquear estas direcciones IP. Según tu arquitectura, ¿dónde deberías hacerlo?
+- AWS WAF, cloudfront libera ips publicas de cloudfront por ende una vez sale del mismo no es interceptable la IP origen.
+
+Question 3:
+
+Tus instancias EC2 están desplegadas en un Grupo de Colocación de Clústeres para llevar a cabo una Computación de Alto Rendimiento (HPC). Te gustaría maximizar el rendimiento de la red entre tus instancias EC2. ¿Qué deberías utilizar?
+- Al buscarse el maximo rendimiento sin lugar a dudas la version mejorada para HPC de EL Elastic Network Adapter -> Elastic Fabric Adapter es la eleccion, si simplemente se buscase mejorar el ancho de banda de el cluster de instancias EC2 podria optarse por Elastic Network Adapter sin dudas.
