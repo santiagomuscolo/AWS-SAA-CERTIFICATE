@@ -38,3 +38,32 @@ SES: es un servicio low level para el envio de correos electronicos via SMTP/API
 Pinpoint: es un servicio high-level destinado a marketing + engagement multicanal.
 
 ![[Pasted image 20260703175628.png]]
+
+## AWS Systems Manager (SSM)
+Systems Manager es un servicio hibrido que te permite gesonar tus sistemas EC2 y On-Premise a escala, obteniendo datos operativos del estado de la infraestructura de los mismos.
+
+El mismo permite:
+- Automatizar parches para mejorar la normativa
+- Ejecutar comandos en toda la flota de servidores
+- Almacenar la configuracion de parametros con el almacen de parametros SSM
+
+**Como funciona?**
+Para usar SSM es necesario instalar el agente SSM en las instancias que controlamos, se instala por defecto en AMIs de Amazon Linux y en algunas AMI de ubuntu
+![[Pasted image 20260706142448.png]]
+
+## AWS Cost Explorer
+Cost explorer nos permite visualizar, entender y gestionar costes en AWS a lo largo del tiempo, creando infomres personalizados, analizando datos a alto nivel y obteniendo informacion con granularidad mensual, por horas a nivel de recursos
+![[Pasted image 20260706144723.png]]
+
+Hay una feature muy interesante de este servicio que se llama "Prevision de uso" o en ingles "Usage forecast" que infiere mediante nuestros gastos mensuales lo **posibles** gastos de los proximos meses.
+![[Pasted image 20260706144952.png]]
+
+## AWS Transcoder
+Este servicio de AWS nos permite convertir archivos multimedia almacenados en S3 a archivos multimedia con un formato soportado por la diversidad de dispositivos que existen (tablets, computadores, etc...).
+
+ventajas
+- Facil de usar
+- Altamente escalable - puede manejar grandes volumenes de archivos multimedia y archivos de gran size
+- Rentable: modelo de precios basado en la duracion
+
+![[Pasted image 20260706145319.png]]
