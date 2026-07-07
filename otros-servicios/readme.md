@@ -67,3 +67,39 @@ ventajas
 - Rentable: modelo de precios basado en la duracion
 
 ![[Pasted image 20260706145319.png]]
+
+## AWS Batch
+El servicio de AWS Batch nos permite procesar operaciones por lotes de forma totalmente gestionada a escala, permitiendo ejecutar eficientemente hasta 100.000 jobs de computacion en paralelo.
+
+**Que es una operacion por lote?**
+Una operacion por lote es un job con un inicio y un final (en contraposicion a uno continuo)
+
+**Batch vs Lambda**
+- Lambda
+	- Limite de tiempo
+	- Tiempos de ejecucion limitados
+	- Espacio de disco temporal limitado
+	- Serverless
+- Por lotes
+	- Sin limite de tiempo
+	- Cualquier tiempo de ejecucion siempre que este empaquetado como imagen docker
+	- depende de EBS / Almacen de instancias (instance storage) para el espacio de disco
+	- Depende de EC2
+
+**Ejemplo**
+![[Pasted image 20260707160437.png]]
+
+## AWS appflow
+App flow es un servicio que nos permite transferir datos de aplicaciones Saas y AWS de forma segura sin necesidad de pasar por integraciones.
+
+Destinos
+- S3
+- Redshift
+- no aws snowflake, salesforce
+
+Frecuencia 
+- Programada
+- En respuesta a eventos
+- Bajo demanda
+
+Cifrado a traves de internet publico o privado con PrivateLink
