@@ -20,3 +20,45 @@ Como funciona?
 - Seleccionamos una carga de trabajo y respondemos unas preguntas
 - Revisamos nuestras respuestas en comparacion a los 6 pilares
 - Obtenemos asesoramiento con videos y documentacion, generamos un informa y vemos los resultados en un dashboard
+
+## AWS Trusted Advisor
+Este servicio de AWS nos permite realizar un analisis high level de nuestras cuentas de aws y proporcionando recomendaciones hasta en 5 categorias.
+
+sirve para:
+- Optimizacion de costes
+- Rendimiento
+- Seguridad
+
+![[Pasted image 20260710184024.png]]
+
+**Planes de soporte**
+1. 7 Core checks (basic & developer)
+	- Permisos de buckets s3
+	- Security groups
+	- Uso de IAM
+	- MFA en la cuenta root
+	- EBS Public snapshots
+	- RDS Public snapshots
+	- Service Quotas
+2. Full checks (business & enterprise)
+	- Comprobaciones completas disponibles en las 5 categorias
+	- Posibilidad de establecer alarmas de cloudwatch cuando se alcanzan los limites
+	- Acceso programado mediante la AWS support API
+
+**categorias**
+- Optimizacion de costos
+- Rendimiento
+- Seguridad
+- Tolerancia a errores
+- Cuotas de servicio
+
+## Mas ejemplos de arquitecturas
+LINKS IMPORTANTISIMOS PARA EL USO DIARIO:
+1. https://aws.amazon.com/architecture/
+2. https://aws.amazon.com/solutions/
+
+## Quiz
+Question 1:
+
+¿Qué servicio de AWS analiza tu cuenta de AWS y da recomendaciones para la optimización de los costes, el rendimiento, la seguridad, la tolerancia a los fallos y los límites del servicio?
+- AWS Trusted Advisor
