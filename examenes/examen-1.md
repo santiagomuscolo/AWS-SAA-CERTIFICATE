@@ -55,3 +55,5 @@ aca marque cosas correctas como establecer la regla conexion tcp del SG pero le 
 	 aqui yo puse global accelerator pero lo correcto seria implementar un NLB antes del ALB que maneje las IPs estaticas y configurarlo como balanceador de carga de la red ya que ese tipo de balancer nos permite un control fino sobre las mismas que el ALB no permite.
 	 Global accelerator proporciona IPs estaticas pero esta pensado para optimizar el enrutamiento global, no para asignar direcciones IP estáticas a balanceadores de carga dentro de una región.
 
+13. Un arquitecto de soluciones está diseñando una infraestructura de alta disponibilidad para una aplicación web alojada en instancias EC2 dentro de un Auto Scaling Group. Uno de los requisitos clave es garantizar que los datos almacenados en los volúmenes raíz de EBS no se eliminen si una instancia se termina. ¿Qué configuración debe aplicarse para cumplir con este requisito?
+	 aqui yo coloque el uso de aws backup pero fue equivoco ya que EBS ofrece un atributo para evitar su borrado tras la finalizacion de la instancia este es denominado "deleteOnTermination"
