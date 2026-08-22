@@ -48,3 +48,25 @@
 
 14. Una empresa de tecnología ha estado ejecutando varias instancias EC2 reservadas para alojar una plataforma de análisis de datos. Debido a un cambio en los objetivos de negocio, la plataforma fue descontinuada la semana pasada. La empresa ahora busca minimizar costos y deshacerse de estas instancias reservadas lo antes posible. ¿Qué acciones rentables debe tomar el equipo de AWS para optimizar los costos en esta situación? (Selecciona DOS)
 	 Aqui lo primero es terminar las instancias reservadas para evitar que una vez pasado el tiempo de reserva sean facturadas como on-demand, en adicion, publicarlas en el marketplace para poder venderlas.
+
+**Intento 2**
+
+Incorrectas: 4
+
+1. Una empresa está implementando un entorno de Microsoft Dynamics CRM en AWS utilizando CloudFormation. El arquitecto de soluciones necesita instalar y configurar la arquitectura, que incluye controladores de dominio de Microsoft Active Directory (AD), Microsoft SQL Server 2016 y múltiples instancias de Amazon EC2 para alojar Microsoft Dynamics CRM y otras dependencias. El arquitecto debe asegurarse de que los componentes requeridos se estén ejecutando correctamente antes de que CloudFormation continúe con la creación de la pila. ¿Cuál de las siguientes opciones debe configurar el arquitecto para cumplir con este requisito?
+	 Configurar un atributo CreationPolicy en la instancia dentro de la plantilla de CloudFormation. Enviar una señal de éxito después de que las aplicaciones estén instaladas y configuradas utilizando el script auxiliar cfn-signal es la mejor opcion ya que crearemos a partir de la signal de exito cfn-signal para poder completar la pila.
+
+2. Una nueva plataforma de banca en línea ha sido rediseñada para tener una arquitectura de microservicios en la que las aplicaciones complejas se descomponen en servicios más pequeños e independientes. La nueva plataforma utiliza Kubernetes y los contenedores de la aplicación están optimizados para ejecutar servicios pequeños y desacoplados. La nueva solución debe eliminar la necesidad de aprovisionar y administrar servidores, permitir especificar y pagar solo por los recursos utilizados por la aplicación y mejorar la seguridad mediante aislamiento a nivel de aplicación. ¿Cuál de las siguientes es la solución más adecuada para implementar esta nueva plataforma en AWS?
+	 Siempre que hablamos de Kubernetes hablamos en aws de su version EKS (Elastic Kubernetes service), en este caso para evitar la necesidad de aprovisionamiento (Creacion de recursos de forma manual) puede utilizarse un grupo de auto scaling para la paltaforma bancaria basada en contenedores con AWS Fargate en amazon EKS.
+
+3. Una empresa está utilizando 10 cuentas de AWS consolidadas mediante AWS Organizations. Desean copiar más de 500 objetos de un bucket de S3 a otro bucket de S3 que pertenece a una cuenta diferente dentro de la misma organización. El arquitecto de soluciones recibió instrucciones para configurar los permisos necesarios para esta tarea y garantizar que la cuenta de destino sea la propietaria de los objetos copiados, en lugar de la cuenta de origen. ¿Cómo puede el arquitecto lograr este requisito?
+	 Aqui siempre que se quiere compartir recursos entre buckets de S3 de diferentes cuentas, lo ideal es configurar permisos y politicas IAM entre las cuentas para poder copiar el contenido de un bucket al otro.
+
+4. Un servidor on-premises utiliza un compartido de archivos SMB para almacenar datos de la aplicación.
+
+- La aplicación genera 50 MB de datos por día, pero solo necesita acceder a algunos de ellos para procesos diarios.
+- Para reducir costos, la empresa planea migrar todos los datos a AWS, pero quiere mantener acceso de baja latencia, similar al compartido de archivos local.
+- La empresa no tiene la capacidad de desarrollar una solución personalizada para esta integración.
+
+¿Qué servicio de AWS debería usar la empresa?
+	 Aqui al no poder utilizar una solucion customizada lo ideal es usar storage gateway permitiendo un hibrido entre almacenamiento on-premise y almacenamiento en la nube con cache local y soporte SMB 
