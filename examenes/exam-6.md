@@ -41,3 +41,25 @@ incorrectas: 10
 	 Aqui coloque Run command y si bien es utilizable requiere mas configuracion.
 
 
+**intento 2**
+
+1. Se ha lanzado una instancia EC2 bajo demanda dentro de una subred privada en una VPC. La Network ACL asociada a esta subred permite todo el tráfico entrante, pero deniega todo el tráfico saliente. El grupo de seguridad de la instancia tiene una regla de entrada que permite conexiones SSH desde cualquier dirección IP, pero no tiene reglas de salida configuradas. En este contexto, ¿qué cambio debe realizarse para que sea posible establecer una conexión SSH a la instancia EC2?
+	 En este problema las reglas de salida del SG no son un pilar importante ya que es stateful asi que lo que entra sale, la cuestion es el NACL que es stateless y debe especificarse entrada y salida.
+
+2. Un arquitecto de soluciones ha creado una organización de AWS con varias cuentas de AWS. La política de seguridad requiere que el uso de acciones de API específicas esté limitado en todas las cuentas. El arquitecto de soluciones requiere un método de controlar centralmente estas acciones. ¿Cuál es el método más simple para lograr los requisitos?
+	 En cuanto a simpleza se refiere se podria crear una politica de control de servicios en la OU raiz para denegar el acceso a servicios o acciones y tendriamos el control de permisos en un solo lugar.
+
+3. Una plataforma de análisis de datos en tiempo real está desplegada sobre un grupo de Auto Scaling de instancias EC2. Para mejorar la eficiencia operativa, es necesario configurar la capacidad del grupo para que aumente o disminuya automáticamente con base en métricas específicas y valores umbral definidos. Estas métricas deben activar alarmas en Amazon CloudWatch que inicien el proceso de escalado. ¿Qué tipo de política de escalado sería la más adecuada para implementar en este caso?
+	 Cuando hablamos de umbrales el escalado por pasos es idoneo, si tuviesemos un numero definido seria por objetivos y si no tuviesemos nada de eso un escalado simple.
+
+4. Una empresa de análisis de datos almacena una gran cantidad de datos en su centro de datos on-premises. Para escalar su infraestructura de almacenamiento, buscan volúmenes en la nube que puedan montar utilizando dispositivos iSCSI desde sus servidores on-premises. Tienen una aplicación de análisis de datos local que accede con frecuencia a los datos más recientes, mientras que los datos más antiguos rara vez se utilizan. Debes minimizar la necesidad de escalar el almacenamiento on-premises mientras garantizas un acceso de baja latencia a los datos desde su aplicación web. ¿Qué tipo de servicio de AWS Storage Gateway deberías utilizar para cumplir con estos requisitos?
+	 Aqui storage gateway + cached volumes es el ideal dentro de los gateways ofrecidos ya que permite guardar archivos en S3 con un acceso de baja latencia y una capa de cache a los archivos mas accedidos.
+
+5. Una organización del sector jurídico conserva archivos confidenciales de casos legales almacenados en servidores locales (on-premises). Estos archivos deben permanecer inmutables y protegidos contra cualquier alteración una vez almacenados. La normativa legal exige trazabilidad completa del acceso y auditoría precisa sobre cada archivo. Actualmente, la mayoría de estos documentos están inactivos y no se utilizan frecuentemente, y la infraestructura local de almacenamiento está al límite de su capacidad. El arquitecto de soluciones debe diseñar una estrategia para trasladar inmediatamente los archivos actuales a AWS y permitir la incorporación segura de nuevos archivos. ¿Cuál de las siguientes opciones representa la solución más adecuada para cumplir con estos requerimientos?
+	 Aqui para la migracion se puede configurar DataSync + S3 con object lock para no permitir realizar modificaciones en los objetos en cuestion mas para poder tener un trackeo granular de los objetos se debe habilitar cloudtrail con data events.
+
+6. Una empresa de redes sociales necesita capturar información detallada de todas las solicitudes HTTP que pasen por su Application Load Balancer público cada cinco minutos. Además, deben rastrear la dirección IP del cliente y las latencias de la red. Quieren usar estos datos para analizar patrones de tráfico y solucionar problemas en sus aplicaciones Docker desplegadas en el servicio Amazon ECS Anywhere. ¿Cuál de las siguientes opciones cumple con los requisitos con la menor sobrecarga?
+	 Aqui es idoneo es habilitar los registros de acceso en el ALB (para capturar registros detallados del trafico) y integrar el cluster de ECS con AWS application insights para analizar patrones de trafico. 
+
+7. Un cliente está alojando su sitio web en un clúster de servidores web que están detrás de un Application Load Balancer (AWS ALB) público. Además, el cliente usa Amazon Route 53 para administrar su DNS público. ¿Cómo debe configurar el registro de la zona DNS para que apunte al balanceador de carga?
+	 Debido a la volatilidad de la IP del ALB es idoneo linkearlo mediante el ALIAS en lugar de la IP.
